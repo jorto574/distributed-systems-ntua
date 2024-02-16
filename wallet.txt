@@ -1,0 +1,5 @@
+class wallet {
+    string public_key;
+    int amount;
+    void sign();
+}
