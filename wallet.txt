@@ -3,3 +3,4 @@ class wallet {
     int amount;
     void sign();
 }
+test
