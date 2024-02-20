@@ -1,0 +1,8 @@
+class block {
+    int index;
+    timestamp timeStamp;
+    list<transaction> transactions;
+    string validator; /* public key */
+    string current_hash;
+    string previous_hash;
+}

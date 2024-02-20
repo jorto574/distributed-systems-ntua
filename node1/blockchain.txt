@@ -1,0 +1,5 @@
+class blockchain {
+    list<block> blocks;
+    void validate_chain();
+    block view();
+}

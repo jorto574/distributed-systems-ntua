@@ -1,4 +1,4 @@
-class block:
+class Block:
 
     current_index = 0 # index of the most recently added block
     current_hash = 1 # hash of the most recently added block

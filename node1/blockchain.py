@@ -1,4 +1,4 @@
-class blockchain:
+class Blockchain:
     def __init__(self, block):
         self.genesis_block = block
 
