@@ -1,19 +1,18 @@
-from wallet import Wallet
+from my_wallet import MyWallet
 from state import State
 
 class Transaction:
-    global_nonce = 0
+    global_nonce = -1
 
-    def __init__(self, sender_address, receiver_address, type_, amount, message, nonce, signature):
+    def __init__(self, sender_address, receiver_address, type_of_transaction, amount, message, signature):
         Transaction.global_nonce += 1
 
         self.nonce = Transaction.global_nonce
         self.sender_address = sender_address
         self.receiver_address = receiver_address
-        self.type_of_transaction = type_
+        self.type_of_transaction = type_of_transaction
         self.amount = amount
         self.message = message
-        self.nonce = nonce
         self.signature = signature
 
     def broadcast_transaction(self):

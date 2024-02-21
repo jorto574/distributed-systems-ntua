@@ -1,4 +1,4 @@
-from wallet import Wallet
+from my_wallet import MyWallet
 from state import State
 
 class Transaction:
@@ -15,9 +15,9 @@ class Transaction:
         self.message = message
         self.signature = signature
 
-    def broadcast_transaction(self):
+    """ def broadcast_transaction(self):
         # TODO somehow collect all public keys 
         public_keys = [Wallet.get_public_key() for Wallet in State.get_wallets()]
 
-        # TODO after collecting all pks, send an http request to all nodes 
+        # TODO after collecting all pks, send an http request to all nodes  """
     

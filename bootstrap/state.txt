@@ -1,6 +1,0 @@
-class state {
-    list<wallet> wallets;
-    blockchain blockchain;
-    void perform_transaction();
-    void validate_transaction();
-}

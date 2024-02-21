@@ -1,7 +1,8 @@
 from block import Block
 from blockchain import Blockchain
 from transaction import Transaction
-from wallet import Wallet
+from my_wallet import MyWallet
+from state import State
 import time
 
 def init_bootstrap():
@@ -9,7 +10,7 @@ def init_bootstrap():
     public_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
     private_key = 0 # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
-    new_wallet = Wallet(public_key, private_key, amount)
+    my_wallet = MyWallet(public_key, private_key, amount)
 
     # Create initial bootstrap transcation
     sender_address = 0
@@ -20,7 +21,7 @@ def init_bootstrap():
     signature = 0 # TODO must create thee sign_transaction func
     new_transaction = Transaction(sender_address, receiver_address, type_of_transaction, amount, message, signature)
     
-    new_wallet.set_amount(amount)
+    my_wallet.set_amount(amount)
 
     # Create genesis_block
     index = 0
@@ -32,4 +33,8 @@ def init_bootstrap():
     new_block = Block(index, timestamp, transactions, validator, current_hash, previous_hash)
 
     # Initiate the blockchain
-    blockchain = Blockchain([new_block])
+    my_blockchain = Blockchain([new_block])
+
+    # Create the State
+    my_state = State(my_blockchain, [my_wallet], [])
+    return my_state

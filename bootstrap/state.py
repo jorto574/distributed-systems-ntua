@@ -7,6 +7,9 @@ class State:
 
     def get_wallets(self):
         return self.wallets
+    
+    def add_wallet(self, wallet):
+        self.wallets.append(wallet)
 
     def perform_transaction(self):
         pass
