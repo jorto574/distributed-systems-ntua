@@ -43,7 +43,6 @@ def receive_ips_ports_pks_from_bootsrap():
             "status": "success"
         }
         response = jsonify(response_data)
-        print(response)
 
         return response, 200
     
@@ -54,6 +53,7 @@ def receive_ips_ports_pks_from_bootsrap():
             "error": str(e)  
         }
         response = jsonify(response_data)
+        
         return response, 500
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ def init_node():
     amount = 0
     my_wallet = MyWallet(public_key, private_key, amount)
 
+    # send a request to the bootsrao, giving him your public key and receive your unique node_id
     def receive_id_from_bootstrap():
         url = "http://127.0.0.1"
         port = 3000

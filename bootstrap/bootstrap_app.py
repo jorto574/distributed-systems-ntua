@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, after_this_request
 from dotenv import load_dotenv, dotenv_values
 from my_wallet import MyWallet
 from wallet import Wallet
 from state import State
-from init_bootstrap import init_bootstrap, broadcast_ips_ports_pks
+from init_bootstrap import init_bootstrap
+import requests
 import os
 
 app = Flask(__name__)
@@ -45,10 +46,47 @@ def receive_message():
     return
 
 node_id = 0
-# when a node enters, it must send a request to this url
+# when a node enters, it must send a request to this url so that the bootstrap sends him his unique node_id
 @app.route('/talkToBootstrap', methods=['GET', 'POST'])
 def talk_to_bootstrap():
     global my_state
+
+    # here the bootstrap node broadcasts to every other node all the ips, ports and public keys of other nodes
+    def broadcast_ips_ports_pks(num_nodes, my_state):
+        url = "http://127.0.0.1"
+        port = 3000
+        payload = []
+
+        # create the request body
+        for i in range (0, num_nodes + 1):
+            payload.append({
+                "node_id": i,
+                "ip_address": url,
+                "port": port,
+                "node_public_key": my_state.get_wallets()[i].get_public_key()
+            })
+            port += 1
+        
+        print(payload)
+
+        # send http request to each other node
+        port = 3001
+        for i in range (1, num_nodes + 1):
+            try:
+                print("heress")
+
+                response = requests.post(f"{url}:{port}/receiveIpsPortsPksFromBootstrap", json = payload)
+                port += 1
+
+                if response.status_code == 200:
+                    response_json = response.json()
+                    print("Request successful!")
+                else:
+                    print(f"Request failed with status code: {response.status_code}")
+
+            except requests.exceptions.RequestException as e:
+                print(f"Error making the request: {e}")
+
     try:
         print("got to the request!")
         global node_id
@@ -67,8 +105,11 @@ def talk_to_bootstrap():
         response = jsonify(response_data)
         print(response)
 
-        if node_id == 2:
-            broadcast_ips_ports_pks(node_id, my_state)
+        @after_this_request
+        def after_response(response):
+            if node_id == 1:
+                broadcast_ips_ports_pks(node_id, my_state)
+            return response
 
         return response, 200
     

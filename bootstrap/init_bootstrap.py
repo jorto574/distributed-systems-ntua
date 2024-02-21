@@ -4,9 +4,7 @@ from transaction import Transaction
 from my_wallet import MyWallet
 from wallet import Wallet
 from state import State
-from Flask import request
 import time
-import requests
 
 def init_bootstrap():
     # Create a wallet for the bootsrap
@@ -39,47 +37,8 @@ def init_bootstrap():
     my_blockchain = Blockchain([new_block])
 
     # Create the State
-    my_state = State(my_blockchain, [my_wallet], [])
     my_wallet_for_state = Wallet(public_key, amount)
-    my_state.add_wallet(my_wallet_for_state)
+    my_state = State(my_blockchain, [my_wallet_for_state], [])
 
     return my_state
-
-# here the bootstrap node broadcasts to every other node all the ips, ports and public keys of other nodes
-def broadcast_ips_ports_pks(num_nodes, my_state):
-    url = "http://127.0.0.1"
-    port = 3000
-    payload = {
-        "node_id": 0,
-        "ip_address": url,
-        "port": port,
-        "node_public_key": my_state.get_wallets[0]
-    }
-
-    # create the request body
-    for i in range (1, num_nodes):
-        port += i
-        node_public_key = my_state.get_wallets[i]
-        payload = payload.append({
-            "node_id": i,
-            "ip_address": url,
-            "port": port,
-            "node_public_key": node_public_key
-        })
-
-    # send http request to each other node
-    port = 3000
-    for i in range (1, num_nodes):
-        try:
-            port += i
-            response = requests.post(f"{url}:{port}/receiveIpsPortsPksFromBootstrap", json = payload)
-
-            if response.status_code == 200:
-                response_json = response.json()
-                print("Request successful!")
-            else:
-                print(f"Request failed with status code: {response.status_code}")
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error making the request: {e}")
     
