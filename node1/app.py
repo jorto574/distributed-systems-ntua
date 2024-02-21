@@ -33,5 +33,28 @@ def receive_message():
     transaction_kind = request.args.get('transaction_kind', '')
     return
 
+@app.route('/receiveIpsPortsPksFromBootstrap', methods=['POST'])
+def receive_ips_ports_pks_from_bootsrap():
+    try:
+        request_data = request.get_json()
+        print(request_data)
+
+        response_data = {
+            "status": "success"
+        }
+        response = jsonify(response_data)
+        print(response)
+
+        return response, 200
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        response_data = {
+            "status": "failed",
+            "error": str(e)  
+        }
+        response = jsonify(response_data)
+        return response, 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=3001)

@@ -3,7 +3,7 @@ from dotenv import load_dotenv, dotenv_values
 from my_wallet import MyWallet
 from wallet import Wallet
 from state import State
-from init_bootstrap import init_bootstrap
+from init_bootstrap import init_bootstrap, broadcast_ips_ports_pks
 import os
 
 app = Flask(__name__)
@@ -66,6 +66,10 @@ def talk_to_bootstrap():
         }
         response = jsonify(response_data)
         print(response)
+
+        if node_id == 2:
+            broadcast_ips_ports_pks(node_id, my_state)
+
         return response, 200
     
     except Exception as e:
