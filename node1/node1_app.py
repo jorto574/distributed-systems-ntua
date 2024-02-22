@@ -37,6 +37,7 @@ def receive_message():
 def receive_ips_ports_pks_from_bootsrap():
     try:
         request_data = request.get_json()
+        print("request_data")
         print(request_data)
 
         response_data = {

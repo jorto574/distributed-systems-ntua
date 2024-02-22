@@ -11,6 +11,9 @@ class State:
     def add_wallet(self, wallet):
         self.wallets.append(wallet)
 
+    def get_blockchain(self):
+        return self.blockchain
+
     def perform_transaction(self):
         pass
 

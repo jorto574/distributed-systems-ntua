@@ -15,6 +15,19 @@ class Transaction:
         self.message = message
         self.signature = signature
 
+    def to_dict(self):
+        return {
+            "transaction": {
+                "nonce": self.nonce,
+                "sender_address": self.sender_address,
+                "receiver_address": self.receiver_address,
+                "type_of_transaction": self.type_of_transaction,
+                "amount": self.amount,
+                "message": self.message,
+                "signature": self.signature
+            }
+        }
+
     """ def broadcast_transaction(self):
         # TODO somehow collect all public keys 
         public_keys = [Wallet.get_public_key() for Wallet in State.get_wallets()]

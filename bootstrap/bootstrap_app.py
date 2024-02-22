@@ -67,20 +67,20 @@ def talk_to_bootstrap():
             })
             port += 1
         
-        print(payload)
-
+        # add to the request body the blockchain, so that it can be broadcasted to each node
+        blockchain_dict = my_state.get_blockchain().to_dict()
+        payload.append({
+            "blockchain": blockchain_dict
+        })
         # send http request to each other node
         port = 3001
         for i in range (1, num_nodes + 1):
             try:
-                print("heress")
-
                 response = requests.post(f"{url}:{port}/receiveIpsPortsPksFromBootstrap", json = payload)
                 port += 1
 
                 if response.status_code == 200:
-                    response_json = response.json()
-                    print("Request successful!")
+                    print("Successfully broadcasted to every node!")
                 else:
                     print(f"Request failed with status code: {response.status_code}")
 
@@ -88,7 +88,6 @@ def talk_to_bootstrap():
                 print(f"Error making the request: {e}")
 
     try:
-        print("got to the request!")
         global node_id
         node_id += 1
 
@@ -103,7 +102,6 @@ def talk_to_bootstrap():
             "id": node_id
         }
         response = jsonify(response_data)
-        print(response)
 
         @after_this_request
         def after_response(response):
