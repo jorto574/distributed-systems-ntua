@@ -17,15 +17,13 @@ class Transaction:
 
     def to_dict(self):
         return {
-            "transaction": {
-                "nonce": self.nonce,
-                "sender_address": self.sender_address,
-                "receiver_address": self.receiver_address,
-                "type_of_transaction": self.type_of_transaction,
-                "amount": self.amount,
-                "message": self.message,
-                "signature": self.signature
-            }
+            "nonce": self.nonce,
+            "sender_address": self.sender_address,
+            "receiver_address": self.receiver_address,
+            "type_of_transaction": self.type_of_transaction,
+            "amount": self.amount,
+            "message": self.message,
+            "signature": self.signature
         }
 
     """ def broadcast_transaction(self):

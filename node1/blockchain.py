@@ -10,9 +10,7 @@ class Blockchain:
 
     def to_dict(self):
         return {
-            "blockchain": {
-                "blocks": [block.to_dict() for block in self.block_list]
-            }
+            "blocks": [block.to_dict() for block in self.block_list]
         }
 
     def validate_chain(self):

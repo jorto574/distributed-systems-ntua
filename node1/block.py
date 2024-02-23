@@ -16,12 +16,10 @@ class Block:
 
     def to_dict(self):
         return {
-            "block": {
-                "index": self.index,
-                "timestamp": self.timestamp,
-                "transactions": [transaction.to_dict() for transaction in self.transactions],
-                "validator": self.validator,
-                "current_hash": self.current_hash,
-                "previous_hash": self.previous_hash
-            }
+            "index": self.index,
+            "timestamp": self.timestamp,
+            "transactions": [transaction.to_dict() for transaction in self.transactions],
+            "validator": self.validator,
+            "current_hash": self.current_hash,
+            "previous_hash": self.previous_hash
         }
