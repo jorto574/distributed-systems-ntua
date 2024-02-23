@@ -11,6 +11,9 @@ class Block:
         self.current_hash = current_hash
         self.previous_hash = previous_hash
 
+    def add_transaction(self, transaction):
+        self.transactions.append(transaction)
+
     def to_dict(self):
         return {
             "block": {

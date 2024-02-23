@@ -4,6 +4,7 @@ from my_wallet import MyWallet
 from wallet import Wallet
 from state import State
 from init_bootstrap import init_bootstrap
+from node import Node
 import requests
 import os
 
@@ -55,16 +56,22 @@ def talk_to_bootstrap():
     def broadcast_ips_ports_pks(num_nodes, my_state):
         url = "http://127.0.0.1"
         port = 3000
-        payload = []
+        payload = [{
+            "nodes": [] 
+        }]
 
         # create the request body
         for i in range (0, num_nodes + 1):
-            payload.append({
+            node_public_key = my_state.get_wallets()[i].get_public_key()
+            payload[0]["nodes"].append({
                 "node_id": i,
                 "ip_address": url,
                 "port": port,
-                "node_public_key": my_state.get_wallets()[i].get_public_key()
+                "node_public_key": node_public_key
             })
+            if i >= 1:
+                new_node = Node(i, url, port, node_public_key)
+                my_state.add_node(new_node)
             port += 1
         
         # add to the request body the blockchain, so that it can be broadcasted to each node
@@ -122,5 +129,6 @@ def talk_to_bootstrap():
 
 
 if __name__ == '__main__':
+    print("started boot")
     my_state = init_bootstrap()
     app.run(debug=True, port=3000)

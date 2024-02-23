@@ -2,6 +2,7 @@ from block import Block
 from blockchain import Blockchain
 from transaction import Transaction
 from my_wallet import MyWallet
+from state import State
 import time
 import requests
 
@@ -17,7 +18,6 @@ def init_node():
         url = "http://127.0.0.1"
         port = 3000
         public_key = my_wallet.get_public_key()
-
         try:
             payload = {
                 "public_key": public_key
@@ -45,4 +45,3 @@ def init_node():
 
 if __name__ == '__main__':
     init_node()
-

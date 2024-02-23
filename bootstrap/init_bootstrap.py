@@ -4,6 +4,7 @@ from transaction import Transaction
 from my_wallet import MyWallet
 from wallet import Wallet
 from state import State
+from node import Node
 import time
 
 def init_bootstrap():
@@ -12,6 +13,9 @@ def init_bootstrap():
     private_key = 0 # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
     my_wallet = MyWallet(public_key, private_key, amount)
+
+    # Create a node for the bootstrap
+    my_node = Node(0, "127.0.0.1", 3000, public_key)
 
     # Create initial bootstrap transcation
     sender_address = 0
@@ -38,7 +42,7 @@ def init_bootstrap():
 
     # Create the State
     my_wallet_for_state = Wallet(public_key, amount)
-    my_state = State(my_blockchain, [my_wallet_for_state], [])
+    my_state = State(my_blockchain, [my_wallet_for_state], [], [my_node])
 
     return my_state
     
