@@ -42,6 +42,8 @@ def init_bootstrap():
 
     # Create the State
     my_wallet_for_state = Wallet(public_key, amount)
+
+    # TODO add a stake
     my_state = State(my_blockchain, [my_wallet_for_state], [], [my_node])
 
     return my_state
