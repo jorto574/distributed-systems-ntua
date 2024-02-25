@@ -8,10 +8,8 @@ import requests
 
 def init_node():
     # Create a wallet for the bootsrap
-    public_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
-    private_key = 1 # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
-    my_wallet = MyWallet(public_key, private_key, amount)
+    my_wallet = MyWallet(amount)
 
     # send a request to the bootsrap, giving him your public key and receive your unique node_id
     def receive_id_from_bootstrap():

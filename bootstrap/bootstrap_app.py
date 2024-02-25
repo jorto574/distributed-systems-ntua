@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, after_this_request
+from flask import Flask, request, jsonify, after_this_request, session
 from dotenv import load_dotenv, dotenv_values
 from my_wallet import MyWallet
 from wallet import Wallet
@@ -9,6 +9,7 @@ import requests
 import os
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 load_dotenv()
 
 BASE_URL = os.environ.get("BASE_URL")
@@ -74,6 +75,7 @@ def talk_to_bootstrap():
                 my_state.add_node(new_node)
             port += 1
         
+        session['state'] = 1324234234
         # add to the request body the blockchain, so that it can be broadcasted to each node
         blockchain_dict = my_state.get_blockchain().to_dict()
         payload.append({
