@@ -1,10 +1,9 @@
-from crypto import generate_private_key, generate_public_key, sign_message, verify_signature
+from crypto import generate_key_pairs, sign_message, verify_signature
 from transaction import Transaction
 
 class MyWallet:
     def __init__(self, amount):
-        self.private_key = generate_private_key()
-        self.public_key = generate_public_key(self.private_key)
+        self.public_key, self.private_key = generate_key_pairs()
         self.amount = amount
 
     def get_amount(self):

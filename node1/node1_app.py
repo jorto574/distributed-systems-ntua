@@ -69,7 +69,7 @@ def receive_ips_ports_pks_from_bootsrap():
         # gather all nodes
         received_nodes_list = request_data[0]["nodes"]
         for i in range (0, len(received_nodes_list)):
-            node_public_key = received_nodes_list[i]["node_public_key"]
+            node_public_key = received_nodes_list[i]["node_public_key"]["first"], received_nodes_list[i]["node_public_key"]["second"]
             node = Node(received_nodes_list[i]["node_id"], received_nodes_list[i]["ip_address"], received_nodes_list[i]["port"], node_public_key)
             #wallet = Wallet(node_public_key, )
             my_state.add_node(node)

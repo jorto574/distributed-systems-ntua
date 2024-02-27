@@ -25,8 +25,8 @@ class Transaction:
     # Return the hashed concatenation of every field of a transaction
     def create_transaction_string(self):
         str_nonce = str(self.nonce)
-        str_sender_address = str(self.sender_address)
-        str_receiver_address = str(self.receiver_address)
+        str_sender_address = str(self.sender_address[0]) + str(self.sender_address[1])
+        str_receiver_address = str(self.receiver_address[0]) + str(self.receiver_address[1])
         str_type_of_transaction = str(self.type_of_transaction)
         str_amount = str(self.amount)
         str_message = str(self.message)
@@ -38,8 +38,14 @@ class Transaction:
     def to_dict(self):
         return {
             "nonce": self.nonce,
-            "sender_address": self.sender_address,
-            "receiver_address": self.receiver_address,
+            "sender_address": {
+                "first": self.sender_address[0],
+                "second": self.sender_address[1]
+            },
+            "receiver_address": {
+                "first": self.receiver_address[0],
+                "second": self.receiver_address[1]
+            },
             "type_of_transaction": self.type_of_transaction,
             "amount": self.amount,
             "message": self.message,

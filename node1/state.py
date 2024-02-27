@@ -29,3 +29,6 @@ class State:
 
     def validate_transaction(self):
         pass
+
+    def print_state(self):
+        print("state")

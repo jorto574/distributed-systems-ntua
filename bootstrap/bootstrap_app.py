@@ -68,7 +68,10 @@ def talk_to_bootstrap():
                 "node_id": i,
                 "ip_address": url,
                 "port": port,
-                "node_public_key": node_public_key
+                "node_public_key": {
+                    "first": node_public_key[0],
+                    "second": node_public_key[1]
+                }
             })
             if i >= 1:
                 new_node = Node(i, url, port, node_public_key)

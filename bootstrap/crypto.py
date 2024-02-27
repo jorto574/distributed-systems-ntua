@@ -1,33 +1,29 @@
-from ecdsa import SigningKey, SECP256k1
-import hashlib
+from Crypto.PublicKey import RSA
+from hashlib import sha256
 
-def generate_private_key():
-    private_key = SigningKey.generate(curve=SECP256k1)
-    return private_key
-
-def generate_public_key(private_key):
-    public_key = private_key.get_verifying_key()
-    return public_key
+def generate_key_pairs():
+    keyPair = RSA.generate(bits=2048)
+    public_key = hex(keyPair.n), hex(keyPair.e)
+    private_key = hex(keyPair.n), hex(keyPair.d)
+    return public_key, private_key
 
 def sign_message(message, private_key):
-    message_hash = hashlib.sha256(message).digest()
-    signature = private_key.sign(message_hash)
-    return signature
+    message_hash = int.from_bytes(sha256(message.encode('utf-8')).digest(), byteorder='big')
+    signature = pow(message_hash, int(private_key[1], 16), int(private_key[0], 16))
+    return hex(signature)
 
 def verify_signature(signature, public_key, message):
-    try:
-        return public_key.verify(signature, message)
-    except:
-        return False
+    hash = int.from_bytes(sha256(message.encode('utf-8')).digest(), byteorder='big')
+    hash_from_signature = pow(int(signature, 16), int(public_key[1], 16), int(public_key[0], 16))
+    return hash == hash_from_signature
 
 if __name__ == "__main__":
-    private_key = generate_private_key()
-    public_key = generate_public_key(private_key)
+    public_key, private_key = generate_key_pairs()
     message = "Hello World!!!"
     signature = sign_message(message, private_key)
     print(public_key)
 
-    print("private key: " + str(private_key.to_string().hex()))
-    print("public key: " + str(public_key.to_string("compressed").hex()))
-    print("signature:" + str(signature.hex()))
+    print("private key: " + str(private_key))
+    print("public key:  " + str(public_key))
+    print("signature: " + str(signature))
     print("verify signature: "+ str(verify_signature(signature, public_key, message)))
