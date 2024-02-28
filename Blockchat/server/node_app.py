@@ -1,20 +1,20 @@
 from flask import Flask, request, jsonify
 from transaction import Transaction
-from node import Node
+from Blockchat.models.node import Node
 from state import State
 from block import Block
 from blockchain import Blockchain
-from my_wallet import MyWallet
+from Blockchat.models.my_wallet import MyWallet
 from wallet import Wallet
 import time
 import requests
 
 app = Flask(__name__)
+my_state = None
 
 @app.route('/')
 def hello_world():
     return 'Hello, World! This is a Flask server.'
-
 
 @app.route('/validateTransaction', methods=['POST'])
 def validate_transaction():
@@ -23,7 +23,6 @@ def validate_transaction():
     
     transaction_data = request.get_json()
     transaction = transaction_data['transaction']
-
     return
 
 @app.route('/validateBlock', methods=['POST'])
@@ -33,16 +32,12 @@ def validate_block():
     
     block_data = request.get_json()
     block = block_data['block']
-
     return
-
 
 @app.route('/receiveMessage')
 def receive_message():
     transaction_kind = request.args.get('transaction_kind', '')
     return
-
-my_state = None
 
 @app.route('/receiveIpsPortsPksFromBootstrap', methods=['POST'])
 def receive_ips_ports_pks_from_bootsrap():
@@ -90,6 +85,8 @@ def receive_ips_ports_pks_from_bootsrap():
         response = jsonify(response_data)
         
         return response, 500
+    
+
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3001)
+    app.run(debug=True, port=3002)

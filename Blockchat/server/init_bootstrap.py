@@ -1,13 +1,7 @@
-from block import Block
-from blockchain import Blockchain
-from transaction import Transaction
-from my_wallet import MyWallet
-from wallet import Wallet
-from state import State
-from node import Node
+from models import Block, Blockchain, Transaction, MyWallet, Wallet, State, Node
 import time
 
-def init_bootstrap():
+def init_blockchain():
     # Create a wallet for the bootsrap
     public_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
     private_key = 0 # TODO must create keys based on RSA (or another cryptosystem)
@@ -47,4 +41,5 @@ def init_bootstrap():
     my_state = State(my_blockchain, [my_wallet_for_state], [], [my_node])
 
     return my_state
+
     

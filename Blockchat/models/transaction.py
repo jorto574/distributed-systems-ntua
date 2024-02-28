@@ -1,5 +1,4 @@
-from my_wallet import MyWallet
-from state import State
+from models.state import State
 
 class Transaction:
     global_nonce = -1
@@ -26,8 +25,8 @@ class Transaction:
             "signature": self.signature
         }
 
-    """ def broadcast_transaction(self):
-        # TODO somehow collect all public keys 
+    def broadcast_transaction(self):
+    # TODO somehow collect all public keys 
         public_keys = [Wallet.get_public_key() for Wallet in State.get_wallets()]
 
         # TODO after collecting all pks, send an http request to all nodes  """
