@@ -17,7 +17,6 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_init_node(self, arg):
 
-        state = 
         """Initialize node. If node id = 0 then the blockchain is also initialized"""
         pass  # Add functionality here
 
