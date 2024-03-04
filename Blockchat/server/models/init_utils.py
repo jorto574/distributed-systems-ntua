@@ -9,26 +9,23 @@ from models.wallet import Wallet
 from models.state import State
 from models.node import Node
 
-def init_bootstrap():
+def init_bootstrap(url,port,node_num):
     # Create a wallet for the bootsrap
     public_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
     private_key = 0 # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
-    my_wallet = MyWallet(public_key, private_key, amount)
-
-    # Create a node for the bootstrap
-    my_node = Node(0, "127.0.0.1", 3000, public_key)
+    node_id = 0
+    address = url + ":" + port
+    my_wallet = MyWallet(node_id, address, public_key, private_key)
 
     # Create initial bootstrap transcation
-    sender_address = 0
-    receiver_address = 0 # TODO receiver must be the wallet of bootsrap node
+    sender_address = address
+    receiver_address = address
     type_of_transaction = "coins"
-    amount = 5000
+    amount = 1000*node_num
     message = ""
     signature = 0 # TODO must create thee sign_transaction func
     new_transaction = Transaction(sender_address, receiver_address, type_of_transaction, amount, message, signature)
-    
-    my_wallet.set_amount(amount)
 
     # Create genesis_block
     index = 0
@@ -43,46 +40,45 @@ def init_bootstrap():
     my_blockchain = Blockchain([new_block])
 
     # Create the State
-    my_wallet_for_state = Wallet(public_key, amount)
+    my_wallet_for_state = Wallet(node_id,address, public_key, amount)
 
     # TODO add a stake
-    my_state = State(my_blockchain, [my_wallet_for_state], [], [my_node])
+    my_state = State(my_blockchain, {address:my_wallet_for_state})
 
-    return my_state
+    return my_state, my_wallet
 
-def init_node():
+def init_node(url,port,bootstrap):
     # Create a wallet for the bootsrap
     public_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
     private_key = 1 # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
-    my_wallet = MyWallet(public_key, private_key, amount)
-
+    address = url + ":" + port
+    
     # send a request to the bootsrap, giving him your public key and receive your unique node_id
-    def receive_id_from_bootstrap():
-        url = "http://127.0.0.1"
-        port = 3000
-        public_key = my_wallet.get_public_key()
-        try:
-            payload = {
-                "public_key": public_key
-            }
+    try:
+        payload = {
+            "address": address,
+            "public_key": public_key
+        }
 
-            # send to bootstrap my public key
-            response = requests.post(f"{url}:{port}/talkToBootstrap", json = payload)
-            if response.status_code == 200:
-                response_json = response.json()
+        # send to bootstrap my public key
+        response = requests.post(f"http://{bootstrap}/talkToBootstrap", json = payload)
+        if response.status_code == 200:
+            response_json = response.json()
 
-                # receive from bootstrap my node id
-                node_id = response_json.get("id")
+            # receive from bootstrap my node id
+            node_id = response_json.get("id")
 
-                if node_id is not None:
-                    print(f"Request successful. Node ID: {node_id}")
-                else:
-                    print("Node ID not found in the response.")
+            if node_id is not None:
+                print(f"Request successful. Node ID: {node_id}")
             else:
-                print(f"Request failed with status code: {response.status_code}")
-        
-        except requests.exceptions.RequestException as e:
-            print(f"Error making the request: {e}")
+                print("Node ID not found in the response.")
+        else:
+            print(f"Request failed with status code: {response.status_code}")
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error making the request: {e}")
+    
+    my_wallet = MyWallet(node_id, address, public_key, private_key)
 
-    receive_id_from_bootstrap()
+    return my_wallet
