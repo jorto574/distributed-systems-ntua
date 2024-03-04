@@ -1,4 +1,4 @@
-from models.transaction import Transaction
+from server.models.transaction import Transaction
 
 def send_transaction(recipient_address, message):
     sender_address = "sender_public_key"
