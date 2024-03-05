@@ -1,9 +1,11 @@
+from models.transaction import Transaction
+
 class Block:
     """ current_index = 0 # index of the most recently added block
     current_hash = 1 # hash of the most recently added block
     capacity = 10 # maximum number of transactions in each block """
 
-    def __init__(self, index, timestamp, transactions, validator, current_hash, previous_hash):
+    def __init__(self, index, timestamp, transactions: list[Transaction], validator, current_hash, previous_hash):
         self.index = index
         self.timestamp = timestamp # take current time stamp
         self.transactions = transactions
@@ -11,7 +13,7 @@ class Block:
         self.current_hash = current_hash
         self.previous_hash = previous_hash
 
-    def add_transaction(self, transaction):
+    def add_transaction(self, transaction: Transaction):
         self.transactions.append(transaction)
 
     def to_dict(self):
@@ -23,3 +25,14 @@ class Block:
             "current_hash": self.current_hash,
             "previous_hash": self.previous_hash
         }
+
+    @classmethod
+    def from_dict(cls, block_dict):
+        return cls(
+            block_dict["index"],
+            block_dict["timestamp"],
+            [Transaction.from_dict(t) for t in block_dict["transactions"]],
+            block_dict["validator"],
+            block_dict["current_hash"],
+            block_dict["previous_hash"]
+        )

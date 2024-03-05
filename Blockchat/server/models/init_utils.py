@@ -19,7 +19,7 @@ def init_bootstrap(url,port,node_num):
     my_wallet = MyWallet(node_id, address, public_key, private_key)
 
     # Create initial bootstrap transcation
-    sender_address = address
+    sender_address = "BlockChat Bank of Greece"
     receiver_address = address
     type_of_transaction = "coins"
     amount = 1000*node_num
@@ -43,7 +43,7 @@ def init_bootstrap(url,port,node_num):
     my_wallet_for_state = Wallet(node_id,address, public_key, amount)
 
     # TODO add a stake
-    my_state = State(my_blockchain, {address:my_wallet_for_state})
+    my_state = State(my_blockchain, {address:my_wallet_for_state}, node_num)
 
     return my_state, my_wallet
 

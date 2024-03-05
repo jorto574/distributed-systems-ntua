@@ -2,16 +2,13 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 
-from models.my_wallet import MyWallet
-from models.wallet import Wallet
-from models.state import State
-from models.node import Node
 from models.init_utils import init_bootstrap, init_node
 
 from internal.home import home_bp
 from internal.show_state import state_bp
 
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
+from external.receive_init_from_bootstrap import receive_init_from_bootstap_bp
 
 
 app = Flask(__name__)
@@ -29,16 +26,20 @@ app.config["node_count"] = 0
 app.register_blueprint(home_bp)
 app.register_blueprint(state_bp)
 
-# External Blueprints
-app.register_blueprint(talk_to_bootstrap_bp)
+# Internal Blueprints
+if app.config["is_bootstrap"]=="1":
+    app.register_blueprint(talk_to_bootstrap_bp)
+else: 
+    app.register_blueprint(receive_init_from_bootstap_bp)
 
 if __name__ == '__main__':
-
+    
     if app.config["is_bootstrap"]=="1":
         my_state, my_wallet = init_bootstrap(URL, PORT, app.config["node_num"])
         app.config['my_state'] = my_state
         app.config['my_wallet'] =my_wallet
     else:
-        my_state = None
+        app.config['my_state'] = None
         my_wallet = init_node(URL, PORT, app.config["bootstrap_addr"])
-    app.run(debug=True, port=PORT)
+
+    app.run(debug=False, port=PORT)

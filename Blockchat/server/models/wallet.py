@@ -13,6 +13,15 @@ class Wallet:
             "address": self.address
         }
 
+    @classmethod
+    def from_dict(cls, wallet_dict):
+        return cls(
+            wallet_dict["node_id"],
+            wallet_dict["address"],
+            wallet_dict["public_key"],
+            wallet_dict["amount"]
+        )
+
     def get_amount(self):
         return self.amount
     
