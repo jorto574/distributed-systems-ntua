@@ -21,15 +21,3 @@ class Wallet:
             wallet_dict["public_key"],
             wallet_dict["amount"],
         )
-
-    def get_amount(self):
-        return self.amount
-
-    def set_amount(self, amount):
-        self.amount = amount
-
-    def get_public_key(self):
-        return self.public_key
-
-    def sign_transaction(self, transaction):
-        pass

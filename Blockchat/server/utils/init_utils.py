@@ -12,27 +12,13 @@ from models.node import Node
 
 def init_bootstrap(url, port, node_num):
     # Create a wallet for the bootsrap
-    public_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
-    private_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
-    amount = 0
     node_id = 0
     address = url + ":" + port
-    my_wallet = MyWallet(node_id, address, public_key, private_key)
-
-    # Create initial bootstrap transcation
-    sender_address = "BlockChat Bank of Greece"
-    receiver_address = address
-    type_of_transaction = "coins"
+    my_wallet = MyWallet(node_id, address)
     amount = 1000 * node_num
-    message = ""
-    signature = 0  # TODO must create thee sign_transaction func
-    new_transaction = Transaction(
-        sender_address,
-        receiver_address,
-        type_of_transaction,
-        amount,
-        message,
-        signature,
+
+    new_transaction = my_wallet.create_transaction(
+        0, my_wallet.public_key, "coins", amount, "Genesis transaction"
     )
 
     # Create genesis_block
@@ -50,7 +36,7 @@ def init_bootstrap(url, port, node_num):
     my_blockchain = Blockchain([new_block])
 
     # Create the State
-    my_wallet_for_state = Wallet(node_id, address, public_key, amount)
+    my_wallet_for_state = Wallet(node_id, address, my_wallet.public_key, amount)
 
     # TODO add a stake
     my_state = State(my_blockchain, {address: my_wallet_for_state}, node_num)
@@ -60,14 +46,13 @@ def init_bootstrap(url, port, node_num):
 
 def init_node(url, port, bootstrap):
     # Create a wallet for the bootsrap
-    public_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
-    private_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
-    amount = 0
     address = url + ":" + port
+
+    my_wallet = MyWallet(None, address)
 
     # send a request to the bootsrap, giving him your public key and receive your unique node_id
     try:
-        payload = {"address": address, "public_key": public_key}
+        payload = {"address": address, "public_key": my_wallet.public_key}
 
         # send to bootstrap my public key
         response = requests.post(f"http://{bootstrap}/talkToBootstrap", json=payload)
@@ -87,6 +72,6 @@ def init_node(url, port, bootstrap):
     except requests.exceptions.RequestException as e:
         print(f"Error making the request: {e}")
 
-    my_wallet = MyWallet(node_id, address, public_key, private_key)
+    my_wallet.node_id = node_id
 
     return my_wallet

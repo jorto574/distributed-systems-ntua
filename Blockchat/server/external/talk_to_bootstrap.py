@@ -19,7 +19,8 @@ def broadcast_ips_ports_pks(bootstrap_addr, my_state):
 
     success = True
     # send http request to each node
-    for address in my_state.wallets.keys():
+    for wallet in my_state.wallets.items():
+        address = wallet.address
         if address != bootstrap_addr:
             node_id = my_state.wallets[address].node_id
             try:
@@ -45,6 +46,7 @@ def broadcast_ips_ports_pks(bootstrap_addr, my_state):
 @talk_to_bootstrap_bp.route("/talkToBootstrap", methods=["POST"])
 def talk_to_bootstrap():
     my_state = current_app.config["my_state"]
+    my_wallet = current_app.config["my_wallet"]
     bootstrap_addr = current_app.config["bootstrap_addr"]
     # is_bootstrap = current_app.config['is_bootstrap']
 
@@ -56,22 +58,22 @@ def talk_to_bootstrap():
         node_public_key = request_data.get("public_key")
         node_address = request_data.get("address")
 
+        new_transaction = my_wallet.create_transaction()
+
         new_transaction = Transaction(
-            bootstrap_addr,
-            node_address,
+            my_wallet.public_key,
+            node_public_key,
             "coins",
             1000,
             f"Welcome to Blockchat node {node_id}",
-            None,
         )
-        # TODO: add signature to transaction
         my_state.blockchain.add_transaction(new_transaction)
 
         my_state.wallets[bootstrap_addr].amount -= 1000
         node_wallet = Wallet(node_id, node_address, node_public_key, 1000)
-        my_state.add_wallet(node_address, node_wallet)
+        my_state.add_wallet(node_public_key, node_wallet)
 
-        response_data = {"status": "success", "id": current_app.config["node_count"]}
+        response_data = {"status": "success", "id": node_id}
 
         node_num = current_app.config["node_num"]
         node_count = current_app.config["node_count"]

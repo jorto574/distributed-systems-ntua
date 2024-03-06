@@ -3,12 +3,11 @@ class Transaction:
 
     def __init__(
         self,
-        sender_address: str,
-        receiver_address: str,
+        sender_address: list[str],
+        receiver_address: list[str],
         type_of_transaction: str,
         amount: int,
         message: str,
-        signature,
     ):
         Transaction.global_nonce += 1
 
@@ -18,7 +17,29 @@ class Transaction:
         self.type_of_transaction = type_of_transaction
         self.amount = amount
         self.message = message
-        self.signature = signature
+        self.signature = None
+
+    # Return the hashed concatenation of every field of a transaction
+    def create_transaction_string(self):
+        str_nonce = str(self.nonce)
+        str_sender_address = str(self.sender_address[0]) + str(self.sender_address[1])
+        str_receiver_address = str(self.receiver_address[0]) + str(
+            self.receiver_address[1]
+        )
+        str_type_of_transaction = str(self.type_of_transaction)
+        str_amount = str(self.amount)
+        str_message = str(self.message)
+
+        message_to_hash = (
+            str_nonce
+            + str_sender_address
+            + str_receiver_address
+            + str_type_of_transaction
+            + str_amount
+            + str_message
+        )
+
+        return message_to_hash
 
     def to_dict(self):
         return {

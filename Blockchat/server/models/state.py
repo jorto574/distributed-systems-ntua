@@ -22,9 +22,6 @@ class State:
             wallets[address] = Wallet(**wallet_data)
         return wallets
 
-    def get_wallets(self):
-        return self.wallets
-
     def add_wallet(self, address, wallet):
         self.wallets[address] = wallet
 
@@ -33,12 +30,6 @@ class State:
 
     def add_node(self, node):
         self.nodes.append(node)
-
-    def get_blockchain(self):
-        return self.blockchain
-
-    def get_nodes(self):
-        return self.nodes
 
     def perform_transaction(self):
         pass

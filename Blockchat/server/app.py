@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 
-from models.init_utils import init_bootstrap, init_node
+from Blockchat.server.utils.init_utils import init_bootstrap, init_node
 
 from internal.home import home_bp
 from internal.show_state import state_bp
@@ -37,9 +37,10 @@ if __name__ == "__main__":
     if app.config["is_bootstrap"] == "1":
         my_state, my_wallet = init_bootstrap(URL, PORT, app.config["node_num"])
         app.config["my_state"] = my_state
-        app.config["my_wallet"] = my_wallet
     else:
         app.config["my_state"] = None
         my_wallet = init_node(URL, PORT, app.config["bootstrap_addr"])
+
+    app.config["my_wallet"] = my_wallet
 
     app.run(debug=False, port=PORT)
