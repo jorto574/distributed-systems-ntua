@@ -17,7 +17,7 @@ load_dotenv("../config.env")
 
 URL = os.environ.get("URL")
 PORT = os.environ.get("PORT")
-app.config["bootstrap_addr"] = os.environ.get("BOOTSTRAP_ADDR")                           
+app.config["bootstrap_addr"] = os.environ.get("BOOTSTRAP_ADDR")
 app.config["node_num"] = int(os.environ.get("NODE_NUM"))
 app.config["is_bootstrap"] = os.environ.get("IS_BOOTSTRAP")
 app.config["node_count"] = 0
@@ -26,20 +26,20 @@ app.config["node_count"] = 0
 app.register_blueprint(home_bp)
 app.register_blueprint(state_bp)
 
-# Internal Blueprints
-if app.config["is_bootstrap"]=="1":
+# External Blueprints
+if app.config["is_bootstrap"] == "1":
     app.register_blueprint(talk_to_bootstrap_bp)
-else: 
+else:
     app.register_blueprint(receive_init_from_bootstap_bp)
 
-if __name__ == '__main__':
-    
-    if app.config["is_bootstrap"]=="1":
+if __name__ == "__main__":
+
+    if app.config["is_bootstrap"] == "1":
         my_state, my_wallet = init_bootstrap(URL, PORT, app.config["node_num"])
-        app.config['my_state'] = my_state
-        app.config['my_wallet'] =my_wallet
+        app.config["my_state"] = my_state
+        app.config["my_wallet"] = my_wallet
     else:
-        app.config['my_state'] = None
+        app.config["my_state"] = None
         my_wallet = init_node(URL, PORT, app.config["bootstrap_addr"])
 
     app.run(debug=False, port=PORT)

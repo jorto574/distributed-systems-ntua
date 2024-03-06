@@ -10,7 +10,7 @@ class Wallet:
             "node_id": self.node_id,
             "public_key": self.public_key,
             "amount": self.amount,
-            "address": self.address
+            "address": self.address,
         }
 
     @classmethod
@@ -19,12 +19,12 @@ class Wallet:
             wallet_dict["node_id"],
             wallet_dict["address"],
             wallet_dict["public_key"],
-            wallet_dict["amount"]
+            wallet_dict["amount"],
         )
 
     def get_amount(self):
         return self.amount
-    
+
     def set_amount(self, amount):
         self.amount = amount
 

@@ -1,7 +1,8 @@
 import requests
 
+
 def server_check(base_url, port):
-    
+
     def request(base_url, port):
         url = f"http://{base_url}:{port}"
         try:
@@ -17,7 +18,7 @@ def server_check(base_url, port):
 
     is_up, message = request(base_url, port)
     if is_up:
-        print(message + '\n')
+        print(message + "\n")
         return is_up
     else:
         print("Server is down:", message)

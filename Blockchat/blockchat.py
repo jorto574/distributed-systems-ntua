@@ -1,6 +1,6 @@
 import cmd2
 from dotenv import load_dotenv
-import os 
+import os
 import sys
 
 from cli.stake import stake
@@ -15,11 +15,12 @@ BASE_URL = os.environ.get("BASE_URL")
 PORT = os.environ.get("PORT")
 NODE_ID = os.environ.get("NODE_ID")
 
+
 class BlockchatCLI(cmd2.Cmd):
     def __init__(self):
         super().__init__()
         print_logo()
-        if not server_check(BASE_URL,PORT):
+        if not server_check(BASE_URL, PORT):
             sys.exit()
         show_help()
 
@@ -31,7 +32,7 @@ class BlockchatCLI(cmd2.Cmd):
         """Send a transaction"""
         args = arg.split()
         recipient_address = args[0]
-        message = ' '.join(args[1:])
+        message = " ".join(args[1:])
         send_transaction(recipient_address, message)
 
     def do_stake(self, arg):
@@ -42,9 +43,7 @@ class BlockchatCLI(cmd2.Cmd):
         """View command"""
         view()
 
-    
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli = BlockchatCLI()
     cli.cmdloop()

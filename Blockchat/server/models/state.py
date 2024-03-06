@@ -1,12 +1,13 @@
 from models.wallet import Wallet
 from models.blockchain import Blockchain
 
+
 class State:
-    def __init__(self, blockchain: Blockchain , wallets: list[Wallet], node_num: int):
+    def __init__(self, blockchain: Blockchain, wallets: list[Wallet], node_num: int):
         self.blockchain = blockchain
         self.wallets = wallets
         self.stakes = [0] * node_num
-        self.current_fees = 0 # total fees corresponding to transactions of one block
+        self.current_fees = 0  # total fees corresponding to transactions of one block
         self.test = "state"
 
     def wallets_to_dict(self):
@@ -21,12 +22,11 @@ class State:
             wallets[address] = Wallet(**wallet_data)
         return wallets
 
-
     def get_wallets(self):
         return self.wallets
-    
+
     def add_wallet(self, address, wallet):
-        self.wallets[address]= wallet
+        self.wallets[address] = wallet
 
     def add_block(self, block):
         self.blockchain.add_block(block)
@@ -36,7 +36,7 @@ class State:
 
     def get_blockchain(self):
         return self.blockchain
-    
+
     def get_nodes(self):
         return self.nodes
 

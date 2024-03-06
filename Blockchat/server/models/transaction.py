@@ -1,7 +1,15 @@
 class Transaction:
     global_nonce = -1
 
-    def __init__(self, sender_address: str, receiver_address: str, type_of_transaction: str, amount: int, message: str, signature):
+    def __init__(
+        self,
+        sender_address: str,
+        receiver_address: str,
+        type_of_transaction: str,
+        amount: int,
+        message: str,
+        signature,
+    ):
         Transaction.global_nonce += 1
 
         self.nonce = Transaction.global_nonce
@@ -20,9 +28,9 @@ class Transaction:
             "type_of_transaction": self.type_of_transaction,
             "amount": self.amount,
             "message": self.message,
-            "signature": self.signature
+            "signature": self.signature,
         }
-    
+
     @classmethod
     def from_dict(cls, transaction_dict):
         return cls(
@@ -31,7 +39,5 @@ class Transaction:
             transaction_dict["type_of_transaction"],
             transaction_dict["amount"],
             transaction_dict["message"],
-            transaction_dict["signature"]
+            transaction_dict["signature"],
         )
-
-

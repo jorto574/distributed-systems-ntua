@@ -9,10 +9,11 @@ from models.wallet import Wallet
 from models.state import State
 from models.node import Node
 
-def init_bootstrap(url,port,node_num):
+
+def init_bootstrap(url, port, node_num):
     # Create a wallet for the bootsrap
     public_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
-    private_key = 0 # TODO must create keys based on RSA (or another cryptosystem)
+    private_key = 0  # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
     node_id = 0
     address = url + ":" + port
@@ -22,47 +23,54 @@ def init_bootstrap(url,port,node_num):
     sender_address = "BlockChat Bank of Greece"
     receiver_address = address
     type_of_transaction = "coins"
-    amount = 1000*node_num
+    amount = 1000 * node_num
     message = ""
-    signature = 0 # TODO must create thee sign_transaction func
-    new_transaction = Transaction(sender_address, receiver_address, type_of_transaction, amount, message, signature)
+    signature = 0  # TODO must create thee sign_transaction func
+    new_transaction = Transaction(
+        sender_address,
+        receiver_address,
+        type_of_transaction,
+        amount,
+        message,
+        signature,
+    )
 
     # Create genesis_block
     index = 0
     timestamp = time.time()
     transactions = [new_transaction]
     validator = 0
-    current_hash = 0 # TODO must use a hash function eg SHA256
+    current_hash = 0  # TODO must use a hash function eg SHA256
     previous_hash = 1
-    new_block = Block(index, timestamp, transactions, validator, current_hash, previous_hash)
+    new_block = Block(
+        index, timestamp, transactions, validator, current_hash, previous_hash
+    )
 
     # Initiate the blockchain
     my_blockchain = Blockchain([new_block])
 
     # Create the State
-    my_wallet_for_state = Wallet(node_id,address, public_key, amount)
+    my_wallet_for_state = Wallet(node_id, address, public_key, amount)
 
     # TODO add a stake
-    my_state = State(my_blockchain, {address:my_wallet_for_state}, node_num)
+    my_state = State(my_blockchain, {address: my_wallet_for_state}, node_num)
 
     return my_state, my_wallet
 
-def init_node(url,port,bootstrap):
+
+def init_node(url, port, bootstrap):
     # Create a wallet for the bootsrap
     public_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
-    private_key = 1 # TODO must create keys based on RSA (or another cryptosystem)
+    private_key = 1  # TODO must create keys based on RSA (or another cryptosystem)
     amount = 0
     address = url + ":" + port
-    
+
     # send a request to the bootsrap, giving him your public key and receive your unique node_id
     try:
-        payload = {
-            "address": address,
-            "public_key": public_key
-        }
+        payload = {"address": address, "public_key": public_key}
 
         # send to bootstrap my public key
-        response = requests.post(f"http://{bootstrap}/talkToBootstrap", json = payload)
+        response = requests.post(f"http://{bootstrap}/talkToBootstrap", json=payload)
         if response.status_code == 200:
             response_json = response.json()
 
@@ -75,10 +83,10 @@ def init_node(url,port,bootstrap):
                 print("Node ID not found in the response.")
         else:
             print(f"Request failed with status code: {response.status_code}")
-    
+
     except requests.exceptions.RequestException as e:
         print(f"Error making the request: {e}")
-    
+
     my_wallet = MyWallet(node_id, address, public_key, private_key)
 
     return my_wallet
