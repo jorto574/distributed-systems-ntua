@@ -1,5 +1,5 @@
 from utils.crypto import generate_key_pairs, sign_message, verify_signature
-from transaction import Transaction
+from models.transaction import Transaction
 
 
 class MyWallet:

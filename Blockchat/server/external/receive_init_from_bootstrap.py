@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, current_app
 
 from models.blockchain import Blockchain
 from models.state import State
+import traceback
 
 receive_init_from_bootstap_bp = Blueprint("receiveInitFromBootstrap", __name__)
 
@@ -26,6 +27,7 @@ def receive_init_from_bootstap():
 
     except Exception as e:
         print(f"An error occurred: {e}")
+        traceback.print_exc()  # Print the full traceback
         response_data = {"status": "failed", "error": str(e)}
         response = jsonify(response_data)
 

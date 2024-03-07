@@ -8,6 +8,7 @@ class Transaction:
         type_of_transaction: str,
         amount: int,
         message: str,
+        signature=None,
     ):
         Transaction.global_nonce += 1
 
@@ -17,7 +18,7 @@ class Transaction:
         self.type_of_transaction = type_of_transaction
         self.amount = amount
         self.message = message
-        self.signature = None
+        self.signature = signature
 
     # Return the hashed concatenation of every field of a transaction
     def create_transaction_string(self):

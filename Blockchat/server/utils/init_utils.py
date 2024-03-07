@@ -18,7 +18,7 @@ def init_bootstrap(url, port, node_num):
     amount = 1000 * node_num
 
     new_transaction = my_wallet.create_transaction(
-        0, my_wallet.public_key, "coins", amount, "Genesis transaction"
+        [0, 0], my_wallet.public_key, "coins", amount, "Genesis transaction"
     )
 
     # Create genesis_block
@@ -39,7 +39,9 @@ def init_bootstrap(url, port, node_num):
     my_wallet_for_state = Wallet(node_id, address, my_wallet.public_key, amount)
 
     # TODO add a stake
-    my_state = State(my_blockchain, {address: my_wallet_for_state}, node_num)
+    my_state = State(
+        my_blockchain, {tuple(my_wallet.public_key): my_wallet_for_state}, node_num
+    )
 
     return my_state, my_wallet
 
@@ -62,16 +64,13 @@ def init_node(url, port, bootstrap):
             # receive from bootstrap my node id
             node_id = response_json.get("id")
 
-            if node_id is not None:
-                print(f"Request successful. Node ID: {node_id}")
-            else:
-                print("Node ID not found in the response.")
+            print(f"Request successful. Node ID: {node_id}")
+            my_wallet.node_id = node_id
+
         else:
             print(f"Request failed with status code: {response.status_code}")
 
     except requests.exceptions.RequestException as e:
         print(f"Error making the request: {e}")
-
-    my_wallet.node_id = node_id
 
     return my_wallet

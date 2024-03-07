@@ -12,18 +12,18 @@ class State:
 
     def wallets_to_dict(self):
         wallets_dict = {}
-        for address, wallet in self.wallets.items():
-            wallets_dict[address] = wallet.to_dict()
+        for _, wallet in self.wallets.items():
+            wallets_dict[wallet.node_id] = wallet.to_dict()
         return wallets_dict
 
     def wallets_from_dict(wallets_dict):
         wallets = {}
-        for address, wallet_data in wallets_dict.items():
-            wallets[address] = Wallet(**wallet_data)
+        for _, wallet_data in wallets_dict.items():
+            wallets[tuple(wallet_data["public_key"])] = Wallet(**wallet_data)
         return wallets
 
-    def add_wallet(self, address, wallet):
-        self.wallets[address] = wallet
+    def add_wallet(self, public_key_tuple, wallet):
+        self.wallets[public_key_tuple] = wallet
 
     def add_block(self, block):
         self.blockchain.add_block(block)

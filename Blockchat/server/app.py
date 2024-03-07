@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 
-from Blockchat.server.utils.init_utils import init_bootstrap, init_node
+from utils.init_utils import init_bootstrap, init_node
 
 from internal.home import home_bp
 from internal.show_state import state_bp
