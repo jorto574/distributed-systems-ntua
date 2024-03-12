@@ -3,11 +3,19 @@ from models.transaction import Transaction
 
 
 class Blockchain:
-    def __init__(self, block_list: list[Block]):
+    def __init__(self, block_list: list[Block], capacity):
         self.block_list = block_list
+        self.transaction_inbox = {}
+        self.capacity
 
     def add_block(self, block):
         self.block_list.append(block)
+
+    def add_block():
+        pass
+
+    def update_inbox():
+        pass
 
     def get_blocks(self):
         return self.block_list
@@ -16,9 +24,14 @@ class Blockchain:
         return {"blocks": [block.to_dict() for block in self.block_list]}
 
     def add_transaction(self, transaction: Transaction):
-        last_block = self.block_list[-1]
-        # TODO: check if last block is full. if true create a new block.
-        last_block.add_transaction(transaction)
+        sender_address = transaction.sender_address
+        nonce = transaction.nonce
+        key = (sender_address, nonce)
+        self.transaction_inbox[key] = transaction
+        if len(self.transaction_inbox) == self.capacity: 
+            
+
+
 
     @classmethod
     def from_dict(cls, blockchain_dict):

@@ -33,15 +33,13 @@ def init_bootstrap(url, port, node_num):
     )
 
     # Initiate the blockchain
-    my_blockchain = Blockchain([new_block])
+    my_blockchain = Blockchain([new_block], capacity=node_num)
 
     # Create the State
     my_wallet_for_state = Wallet(node_id, address, my_wallet.public_key, amount)
 
     # TODO add a stake
-    my_state = State(
-        my_blockchain, {tuple(my_wallet.public_key): my_wallet_for_state}, node_num
-    )
+    my_state = State(my_blockchain, [my_wallet_for_state], node_num)
 
     return my_state, my_wallet
 

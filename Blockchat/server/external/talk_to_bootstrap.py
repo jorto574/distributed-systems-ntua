@@ -14,12 +14,12 @@ talk_to_bootstrap_bp = Blueprint("talkToBootstrap", __name__)
 # the bootstrap node broadcasts to every other node all the ips, ports and public keys of other nodes
 def broadcast_ips_ports_pks(bootstrap_addr, my_state):
     blockchain_dict = my_state.blockchain.to_dict()
-    wallets_dict = my_state.wallets_to_dict()
-    payload = {"blockchain": blockchain_dict, "wallets": wallets_dict}
+    wallets_list = my_state.wallets_serialization()
+    payload = {"blockchain": blockchain_dict, "wallets": wallets_list}
     success = True
-
+    breakpoint()
     # send http request to each node
-    for wallet in my_state.wallets.values():
+    for wallet in my_state.wallets:
         address = wallet.address
         if address != bootstrap_addr:
             node_id = wallet.node_id
@@ -82,9 +82,9 @@ def talk_to_bootstrap():
 
         my_state.blockchain.add_transaction(new_transaction)
 
-        my_state.wallets[tuple(my_wallet.public_key)].amount -= 1000
+        my_state.wallets[0].amount -= 1000
         node_wallet = Wallet(node_id, node_address, node_public_key, 1000)
-        my_state.add_wallet(tuple(node_public_key), node_wallet)
+        my_state.add_wallet(node_wallet)
 
         response_data = {"status": "success", "id": node_id}
 

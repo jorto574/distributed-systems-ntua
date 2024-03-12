@@ -15,7 +15,7 @@ def receive_init_from_bootstap():
         data = request.json
 
         blockchain = Blockchain.from_dict(data["blockchain"])
-        wallets = State.wallets_from_dict(data["wallets"])
+        wallets = State.wallets_deserialization(data["wallets"])
         current_app.config["my_state"] = State(blockchain, wallets, node_num)
 
         response_data = {"status": "success"}
