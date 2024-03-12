@@ -34,4 +34,3 @@ def proof_of_stake(stakes):
 
 if __name__ == "__main__":
     proof_of_stake([0, 0, 0, 0, 0])
-    sdfd

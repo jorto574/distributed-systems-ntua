@@ -10,13 +10,16 @@ receive_init_from_bootstap_bp = Blueprint("receiveInitFromBootstrap", __name__)
 @receive_init_from_bootstap_bp.route("/receiveInitFromBootstrap", methods=["POST"])
 def receive_init_from_bootstap():
     node_num = current_app.config["node_num"]
+    my_wallet = current_app.config["my_wallet"]
+
     try:
 
         data = request.json
 
-        blockchain = Blockchain.from_dict(data["blockchain"])
+        blockchain = Blockchain.from_dict(data["blockchain"], capacity=node_num)
         wallets = State.wallets_deserialization(data["wallets"])
-        current_app.config["my_state"] = State(blockchain, wallets, node_num)
+
+        current_app.config["my_state"] = State(blockchain, wallets, node_num, my_wallet)
 
         response_data = {"status": "success"}
         response = jsonify(response_data)

@@ -17,7 +17,7 @@ def broadcast_ips_ports_pks(bootstrap_addr, my_state):
     wallets_list = my_state.wallets_serialization()
     payload = {"blockchain": blockchain_dict, "wallets": wallets_list}
     success = True
-    breakpoint()
+
     # send http request to each node
     for wallet in my_state.wallets:
         address = wallet.address
@@ -60,7 +60,7 @@ def broadcast_ips_ports_pks(bootstrap_addr, my_state):
 @talk_to_bootstrap_bp.route("/talkToBootstrap", methods=["POST"])
 def talk_to_bootstrap():
     my_state = current_app.config["my_state"]
-    my_wallet = current_app.config["my_wallet"]
+    my_wallet = my_state.my_wallet
     bootstrap_addr = current_app.config["bootstrap_addr"]
     # is_bootstrap = current_app.config['is_bootstrap']
 
@@ -80,7 +80,7 @@ def talk_to_bootstrap():
             f"Welcome to Blockchat node {node_id}",
         )
 
-        my_state.blockchain.add_transaction(new_transaction)
+        my_state.add_transaction(new_transaction)
 
         my_state.wallets[0].amount -= 1000
         node_wallet = Wallet(node_id, node_address, node_public_key, 1000)
