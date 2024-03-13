@@ -1,59 +1,14 @@
 from flask import Blueprint, request, jsonify, after_this_request, current_app
-import requests
 import threading
 import traceback
-import time
 
 from models.wallet import Wallet
 from models.transaction import Transaction
 
+from utils.broadcast import broadcast
+
 
 talk_to_bootstrap_bp = Blueprint("talkToBootstrap", __name__)
-
-
-# the bootstrap node broadcasts to every other node all the ips, ports and public keys of other nodes
-def broadcast_ips_ports_pks(bootstrap_addr, my_state):
-    blockchain_dict = my_state.blockchain.to_dict()
-    wallets_list = my_state.wallets_serialization()
-    payload = {"blockchain": blockchain_dict, "wallets": wallets_list}
-    success = True
-
-    # send http request to each node
-    for wallet in my_state.wallets:
-        address = wallet.address
-        if address != bootstrap_addr:
-            node_id = wallet.node_id
-            retries = 3  # Number of retries
-            delay_between_retries = 5  # Delay in seconds between retries
-
-            while retries > 0:
-                try:
-                    success = True
-                    response = requests.post(
-                        f"http://{address}/receiveInitFromBootstrap", json=payload
-                    )
-                    if response.status_code == 200:
-                        print(f"Successfully broadcasted Blockchat to node {node_id}.")
-                        break  # Break the loop if successful
-                    else:
-                        success = False
-                        print(
-                            f"Broadcast to node {node_id} failed with status code: {response.status_code}"
-                        )
-                except requests.exceptions.RequestException as e:
-                    success = False
-                    print(f"Error making the request: {e}")
-                    print(f"Retries remaining {retries}")
-
-                # Retry after a delay
-                time.sleep(delay_between_retries)
-                retries -= 1
-
-            if retries == 0:
-                print(f"Max retries reached. Unable to broadcast to node {node_id}.")
-
-    if success:
-        print(f"Successfully broadcasted Blockchat to every node!")
 
 
 # when a node enters, it must send a request to this url so that the bootstrap sends him his unique node_id
@@ -92,8 +47,18 @@ def talk_to_bootstrap():
         node_count = current_app.config["node_count"]
         response = jsonify(response_data)
         if (node_count + 1) == node_num:
+            # the bootstrap node broadcasts to every other node all the ips, ports and public keys of other nodes
             threading.Thread(
-                target=broadcast_ips_ports_pks, args=(bootstrap_addr, my_state)
+                target=broadcast,
+                args=(
+                    # endpoint
+                    "receiveInitFromBootstrap",
+                    # payload
+                    {
+                        "blockchain": my_state.blockchain.to_dict(),
+                        "wallets": my_state.wallets_serialization(),
+                    },
+                ),
             ).start()
 
         return response, 200
