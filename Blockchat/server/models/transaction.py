@@ -20,7 +20,7 @@ class Transaction:
         self.message = message
         self.signature = signature
 
-    # Return the hashed concatenation of every field of a transaction
+    # Return the concatenation of every field of a transaction
     def create_transaction_string(self):
         str_nonce = str(self.nonce)
         str_sender_address = str(self.sender_address[0]) + str(self.sender_address[1])

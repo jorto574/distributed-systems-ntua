@@ -2,7 +2,9 @@ from models.wallet import Wallet
 from models.blockchain import Blockchain
 from models.transaction import Transaction
 from models.my_wallet import MyWallet
+from models.block import Block
 from utils.proof_of_stake import proof_of_stake
+import time
 
 
 class State:
@@ -37,18 +39,33 @@ class State:
         nonce = transaction.nonce
         key = (sender_address, nonce)
         self.blockchain.transaction_inbox[key] = transaction
+
+        # if capacity is full, a new block must be created
         if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
             seed = self.blockchain.blocks_list[-1].current_hash
             validator_id = proof_of_stake(self.stakes, seed)
+
+            # if current node is validator, he mints the new block
             if validator_id == self.my_wallet.node_id:
                 minted_block = self.mint_block()
                 success = self.broadcast_block(minted_block)
                 if success:
+                    # add block to blockchain if everyone validated it
                     self.add_block(minted_block)
 
     def mint_block(self):
-        # TODO
-        pass
+        transactions_list = list(self.blockchain.transaction_inbox.values())
+        validator_public_key = self.my_wallet.public_key
+        new_block = Block(
+            # TODO, must fix index
+            1,
+            time.time(),
+            transactions_list,
+            validator_public_key,
+            self.create_block_hash(),
+            self.blockchain.blcok_list[-1].current_hash,
+        )
+        return new_block
 
     def broadcast_block(self):
         # TODO

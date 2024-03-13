@@ -2,10 +2,6 @@ from models.transaction import Transaction
 
 
 class Block:
-    """current_index = 0 # index of the most recently added block
-    current_hash = 1 # hash of the most recently added block
-    capacity = 10 # maximum number of transactions in each block"""
-
     def __init__(
         self,
         index,

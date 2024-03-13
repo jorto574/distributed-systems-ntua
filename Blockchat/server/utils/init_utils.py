@@ -21,19 +21,23 @@ def init_bootstrap(url, port, node_num):
         [0, 0], my_wallet.public_key, "coins", amount, "Genesis transaction"
     )
 
+    # Initiate the blockchain
+    my_blockchain = Blockchain([], capacity=node_num)
+    my_blockchain.transaction_inbox = {(0, 0): new_transaction.to_dict()}
+
     # Create genesis_block
     index = 0
     timestamp = time.time()
     transactions = [new_transaction]
     validator = 0
-    current_hash = 0  # TODO must use a hash function eg SHA256
+    current_hash = my_blockchain.create_block_hash
     previous_hash = 1
-    new_block = Block(
+    genesis_block = Block(
         index, timestamp, transactions, validator, current_hash, previous_hash
     )
 
-    # Initiate the blockchain
-    my_blockchain = Blockchain([new_block], capacity=node_num)
+    # Add genesis block to the blockchain
+    my_blockchain.add_block(genesis_block)
 
     # Create the State
     my_wallet_for_state = Wallet(node_id, address, my_wallet.public_key, amount)
