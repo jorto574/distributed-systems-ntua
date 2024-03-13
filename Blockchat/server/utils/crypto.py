@@ -1,4 +1,4 @@
-from Crypto.PublicKey import RSA
+from crypto.PublicKey import RSA
 from hashlib import sha256
 
 
