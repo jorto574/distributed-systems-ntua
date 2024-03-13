@@ -11,16 +11,16 @@ from cli.server_check import server_check
 
 load_dotenv("config.env")
 
-BASE_URL = os.environ.get("BASE_URL")
-PORT = os.environ.get("PORT")
-NODE_ID = os.environ.get("NODE_ID")
+url = os.environ.get("URL")
+port = os.environ.get("PORT")
+address = url + ":" + port
 
 
 class BlockchatCLI(cmd2.Cmd):
     def __init__(self):
         super().__init__()
         print_logo()
-        if not server_check(BASE_URL, PORT):
+        if not server_check(address):
             sys.exit()
         show_help()
 
@@ -30,10 +30,14 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_t(self, arg):
         """Send a transaction"""
-        args = arg.split()
-        recipient_address = args[0]
-        message = " ".join(args[1:])
-        send_transaction(recipient_address, message)
+        try:
+            args = arg.split()
+            recipient_id = args[0]
+            message = " ".join(args[1:])
+            send_transaction(address, recipient_id, message)
+        except:
+            print("Usage:")
+            print("  t <recipient_id> <message>       Send a transaction")
 
     def do_stake(self, arg):
         """Stake a certain amount"""

@@ -1,10 +1,10 @@
 import requests
 
 
-def server_check(base_url, port):
+def server_check(address):
 
-    def request(base_url, port):
-        url = f"http://{base_url}:{port}"
+    def request(address):
+        url = f"http://{address}"
         try:
             response = requests.get(url)
             if response.status_code == 200:
@@ -16,7 +16,7 @@ def server_check(base_url, port):
         except Exception as e:
             return False, f"An error occurred: {str(e)}"
 
-    is_up, message = request(base_url, port)
+    is_up, message = request(address)
     if is_up:
         print(message + "\n")
         return is_up

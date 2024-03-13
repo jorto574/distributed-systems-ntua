@@ -1,19 +1,17 @@
+from server.utils.send_request import send_request
+
 from server.models.transaction import Transaction
 
 
-def send_transaction(recipient_address, message):
-    sender_address = "sender_public_key"
-    receiver_address = recipient_address
-    type_of_transaction = "coins"
-    amount = 10.0
-    signature = "abc123"
+def send_transaction(address, recipient_id, body):
 
-    new_transaction = Transaction(
-        sender_address,
-        receiver_address,
-        type_of_transaction,
-        amount,
-        message,
-        signature,
-    )
-    print(f"Sending transaction to {recipient_address}: {message}")
+    # check if trasaction type is "message"
+    if body[0] == '"':
+        print(f"Broadcasting 'message' transaction to {recipient_id}: {body[1:-1]}")
+        payload = {"recipient_id": recipient_id, "type": "message", "body": body[1:-1]}
+    else:  # transaction is type "coins"
+        print(f"Broadcasting 'coins' transaction to {recipient_id}: {body} BCC ")
+        payload = {"recipient_id": recipient_id, "type": "message", "body": body}
+
+    response = send_request("POST", address, "send_transaction", payload)
+    print(response)
