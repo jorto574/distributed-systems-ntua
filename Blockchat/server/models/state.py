@@ -38,7 +38,8 @@ class State:
         key = (sender_address, nonce)
         self.blockchain.transaction_inbox[key] = transaction
         if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
-            validator_id = proof_of_stake(self.stakes)
+            seed = self.blockchain.blocks_list[-1].current_hash
+            validator_id = proof_of_stake(self.stakes, seed)
             if validator_id == self.my_wallet.node_id:
                 minted_block = self.mint_block()
                 success = self.broadcast_block(minted_block)
