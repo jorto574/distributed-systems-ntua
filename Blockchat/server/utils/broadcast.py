@@ -1,15 +1,21 @@
 from flask import current_app
 import requests
 import time
+from models.wallet import Wallet
 
 
-def broadcast(endpoint: str, payload: dict, verbose: bool = False) -> bool:
+def broadcast(
+    endpoint: str,
+    payload: dict,
+    wallets: list[Wallet],
+    my_address: str,
+    verbose: bool = False,
+) -> bool:
     success = True
-    wallets = current_app.config["my_state"].wallets
 
     for wallet in wallets:
         address = wallet.address
-        is_receiver_self = address == current_app.config["my_wallet"].address
+        is_receiver_self = address == my_address
         if not is_receiver_self:
             node_id = wallet.node_id
             retries = 3

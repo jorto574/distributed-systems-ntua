@@ -42,7 +42,8 @@ class State:
 
         # if capacity is full, a new block must be created
         if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
-            seed = self.blockchain.blocks_list[-1].current_hash
+            seed = self.blockchain.block_list[-1].current_hash
+            seed = int(seed, 16)
             validator_id = proof_of_stake(self.stakes, seed)
 
             # if current node is validator, he mints the new block
@@ -62,8 +63,8 @@ class State:
             time.time(),
             transactions_list,
             validator_public_key,
-            self.create_block_hash(),
-            self.blockchain.blcok_list[-1].current_hash,
+            self.blockchain.create_block_hash(),
+            self.blockchain.block_list[-1].current_hash,
         )
         return new_block
 

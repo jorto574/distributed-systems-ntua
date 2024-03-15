@@ -15,6 +15,7 @@ talk_to_bootstrap_bp = Blueprint("talkToBootstrap", __name__)
 @talk_to_bootstrap_bp.route("/talkToBootstrap", methods=["POST"])
 def talk_to_bootstrap():
     my_state = current_app.config["my_state"]
+    wallets = my_state.wallets
     my_wallet = my_state.my_wallet
     bootstrap_addr = current_app.config["bootstrap_addr"]
     # is_bootstrap = current_app.config['is_bootstrap']
@@ -58,6 +59,8 @@ def talk_to_bootstrap():
                         "blockchain": my_state.blockchain.to_dict(),
                         "wallets": my_state.wallets_serialization(),
                     },
+                    wallets,
+                    bootstrap_addr,
                 ),
             ).start()
 
