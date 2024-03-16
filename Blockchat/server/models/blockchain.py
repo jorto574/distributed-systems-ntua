@@ -19,7 +19,12 @@ class Blockchain:
         return self.block_list
 
     def to_dict(self):
-        return {"blocks": [block.to_dict() for block in self.block_list]}
+        return {
+            "blocks": [block.to_dict() for block in self.block_list],
+            "transactions": [
+                transaction.to_dict() for transaction in self.transaction_inbox.values()
+            ],
+        }
 
     @classmethod
     def from_dict(cls, blockchain_dict, capacity):

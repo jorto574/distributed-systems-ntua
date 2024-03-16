@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 
 from models.blockchain import Blockchain
+from models.transaction import Transaction
 from models.state import State
 import traceback
 
@@ -19,8 +20,14 @@ def receive_init_from_bootstap():
 
         blockchain = Blockchain.from_dict(data["blockchain"], capacity=node_num)
         wallets = State.wallets_deserialization(data["wallets"])
+        transactions = data["blockchain"]["transactions"]
+        state = State(blockchain, wallets, node_num, my_wallet)
 
-        current_app.config["my_state"] = State(blockchain, wallets, node_num, my_wallet)
+        for transaction in transactions:
+            state.add_transaction(Transaction.from_dict(transaction))
+
+        breakpoint()
+        current_app.config["my_state"] = state
 
         response_data = {"status": "success"}
         response = jsonify(response_data)
