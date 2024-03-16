@@ -1,7 +1,7 @@
 import requests
 
 
-def send_request(method, address, endpoint, payload=None):
+def send_http_request(method, address, endpoint, payload=None):
     try:
         url = f"http://{address}/{endpoint}"
         if method == "GET":
