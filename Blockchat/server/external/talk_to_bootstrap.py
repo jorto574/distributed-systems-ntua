@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, after_this_request, current_app
 import threading
 import traceback
 
-from models.wallet import Wallet
+from models.wallet import PublicWallet
 from models.transaction import Transaction
 
 from utils.broadcast import broadcast
@@ -39,7 +39,7 @@ def talk_to_bootstrap():
         my_state.add_transaction(new_transaction)
 
         my_state.wallets[0].amount -= 1000
-        node_wallet = Wallet(node_id, node_address, node_public_key, 1000)
+        node_wallet = PublicWallet(node_id, node_address, node_public_key, 1000)
         my_state.add_wallet(node_wallet)
 
         response_data = {"status": "success", "id": node_id}

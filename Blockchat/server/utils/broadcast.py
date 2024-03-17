@@ -1,20 +1,20 @@
 from flask import current_app
 import requests
 import time
-from models.wallet import Wallet
+from models.wallet import PublicWallet
 
 
 def broadcast(
     endpoint: str,
     payload: dict,
-    wallets: list[Wallet],
+    wallets: list[PublicWallet],
     my_address: str,
     verbose: bool = False,
 ) -> bool:
     success = True
 
     for wallet in wallets:
-        address = wallet.address
+        address = wallet.node_address
         is_receiver_self = address == my_address
         if not is_receiver_self:
             node_id = wallet.node_id

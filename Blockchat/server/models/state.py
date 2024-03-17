@@ -1,7 +1,6 @@
-from models.wallet import Wallet
+from models.wallet import PublicWallet, PrivateWallet
 from models.blockchain import Blockchain
 from models.transaction import Transaction
-from models.my_wallet import MyWallet
 from models.block import Block
 from utils.broadcast import broadcast
 from utils.proof_of_stake import proof_of_stake
@@ -14,9 +13,9 @@ class State:
     def __init__(
         self,
         blockchain: Blockchain,
-        wallets: list[Wallet],
+        wallets: list[PublicWallet],
         node_num: int,
-        my_wallet: MyWallet,
+        my_wallet: PrivateWallet,
     ):
         self.blockchain = blockchain
         self.wallets = wallets
@@ -37,7 +36,7 @@ class State:
     def wallets_deserialization(wallets_list):
         wallets = []
         for wallet_data in wallets_list:
-            wallets.append(Wallet(**wallet_data))
+            wallets.append(PublicWallet(**wallet_data))
         return wallets
 
     def add_transaction(self, transaction: Transaction):

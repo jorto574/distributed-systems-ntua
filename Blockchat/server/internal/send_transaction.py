@@ -34,7 +34,7 @@ def send_transaction():
             "validateTransaction",
             {"transaction": new_transaction.to_dict()},
             my_state.wallets,
-            my_state.my_wallet.address,
+            my_state.my_wallet.node_address,
         )
         # a transaction is added only if all nodes know that is has been validated from everyone
         if success:
@@ -42,7 +42,7 @@ def send_transaction():
                 "addTransaction",
                 {"transaction": new_transaction.to_dict()},
                 my_state.wallets,
-                my_state.my_wallet.address,
+                my_state.my_wallet.node_address,
             )
             my_state.add_transaction(new_transaction)
             return "Transaction validated from all nodes"
