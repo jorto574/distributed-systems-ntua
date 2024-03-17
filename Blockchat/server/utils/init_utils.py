@@ -47,7 +47,7 @@ def init_bootstrap(url, port, node_num):
 
 
 def init_node(url, port, bootstrap):
-    # Create a wallet for the bootsrap
+    # Create a wallet for the node
     address = url + ":" + port
 
     my_wallet = MyWallet(None, address)

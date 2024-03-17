@@ -7,6 +7,7 @@ import traceback
 receive_init_from_bootstap_bp = Blueprint("receiveInitFromBootstrap", __name__)
 
 
+# bootstrap sends to every new inserted node the blockchain and all the wallets. The node must validate the blockchain
 @receive_init_from_bootstap_bp.route("/receiveInitFromBootstrap", methods=["POST"])
 def receive_init_from_bootstap():
     node_num = current_app.config["node_num"]

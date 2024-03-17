@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
+from utils.broadcast import broadcast
 
 from models.transaction import Transaction
 
@@ -26,6 +27,13 @@ def send_transaction():
         my_state.my_wallet.public_key, recipient_public_key, type, amount, message
     )
     breakpoint()
+    result = broadcast(
+        "validateTransaction",
+        {"transaction": new_transaction.to_dict()},
+        my_state.wallets,
+        my_state.my_wallet.address,
+    )
+
     # TODO: validate and broadcast transaction
 
     print(data)

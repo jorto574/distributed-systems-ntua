@@ -4,7 +4,9 @@ from models.transaction import Transaction
 from models.my_wallet import MyWallet
 from models.block import Block
 from utils.proof_of_stake import proof_of_stake
+from utils.crypto import verify_signature
 import time
+from math import ceil
 
 
 class State:
@@ -84,5 +86,33 @@ class State:
     def perform_transaction(self):
         pass
 
-    def validate_transaction(self):
-        pass
+    # TODO this is temporary solution. This must change to a dictionary of node ids with public keys
+    def find_wallet_from_public_key(self, public_key):
+        for wallet in self.wallets:
+            if public_key == wallet.public_key:
+                return wallet
+
+    def validate_transaction(self, transaction):
+        def verify_transaction_signature():
+
+            return verify_signature(
+                transaction.get_signature,
+                transaction.get_sender_address(),
+                transaction.create_transaction_string(),
+            )
+
+        # must find the sender wallet amount
+        def check_wallet_amount():
+            sender_public_key = transaction.sender_address
+            sender_wallet = self.find_wallet_from_public_key(self, sender_public_key)
+
+            fees = 0
+            if transaction.amount >= 0:
+                fees += ceil(transaction.amount + (0.3) * transaction.amount)
+
+            if transaction.message != "":
+                fees += len(transaction.message)
+
+            return transaction.amount + fees <= sender_wallet.amount
+
+        return verify_transaction_signature() and check_wallet_amount()
