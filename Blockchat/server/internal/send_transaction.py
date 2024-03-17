@@ -26,15 +26,24 @@ def send_transaction():
     new_transaction = my_state.my_wallet.create_transaction(
         my_state.my_wallet.public_key, recipient_public_key, type, amount, message
     )
-    breakpoint()
-    result = broadcast(
-        "validateTransaction",
-        {"transaction": new_transaction.to_dict()},
-        my_state.wallets,
-        my_state.my_wallet.address,
-    )
 
-    # TODO: validate and broadcast transaction
+    validated = my_state.validate_transaction(new_transaction)
 
-    print(data)
+    if validated:
+        success = broadcast(
+            "validateTransaction",
+            {"transaction": new_transaction.to_dict()},
+            my_state.wallets,
+            my_state.my_wallet.address,
+        )
+        if success:
+            my_state.add_transaction(new_transaction)
+        else:
+            broadcast(
+                "revokeTransaction",
+                {"transaction": new_transaction.to_dict()},
+                my_state.wallets,
+                my_state.my_wallet.address,
+            )
+
     return "Transaction broadcasted to all nodes"

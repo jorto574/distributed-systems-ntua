@@ -26,13 +26,12 @@ def receive_init_from_bootstap():
         for transaction in transactions:
             state.add_transaction(Transaction.from_dict(transaction))
 
-        breakpoint()
         current_app.config["my_state"] = state
 
         response_data = {"status": "success"}
         response = jsonify(response_data)
 
-        print("Blockchat initalization succesfull - all nodes online.")
+        print("Blockchat initialization successfull - all nodes online.")
 
         return response, 200
 

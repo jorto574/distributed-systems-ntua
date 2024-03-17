@@ -10,7 +10,8 @@ from internal.send_transaction import send_transaction_bp
 
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
 from external.receive_init_from_bootstrap import receive_init_from_bootstap_bp
-
+from external.validate_transaction import validate_transaction_bp
+from external.revoke_transaction import revoke_transaction_bp
 
 app = Flask(__name__)
 
@@ -33,6 +34,8 @@ if app.config["is_bootstrap"] == "1":
     app.register_blueprint(talk_to_bootstrap_bp)
 else:
     app.register_blueprint(receive_init_from_bootstap_bp)
+app.register_blueprint(validate_transaction_bp)
+app.register_blueprint(revoke_transaction_bp)
 
 if __name__ == "__main__":
 

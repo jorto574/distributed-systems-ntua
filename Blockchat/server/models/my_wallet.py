@@ -24,7 +24,7 @@ class MyWallet:
         new_transaction.signature = signature
         return new_transaction
 
-    # TODO validation includes checking if amount of sender is enough
+    """ # TODO validation includes checking if amount of sender is enough
     def validate_transaction(transaction):
         def verify_transaction_signature():
 
@@ -34,4 +34,4 @@ class MyWallet:
                 transaction.create_transaction_string(),
             )
 
-        return verify_transaction_signature()
+        return verify_transaction_signature() """

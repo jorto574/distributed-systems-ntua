@@ -10,9 +10,9 @@ def validate_transaction():
     try:
         data = request.json
         income_transaction = Transaction.from_dict(data["transaction"])
-        my_wallet = current_app.config["my_wallet"]
+        my_state = current_app.config["my_state"]
 
-        validated = my_wallet.validate_transaction(income_transaction)
+        validated = my_state.validate_transaction(income_transaction)
         response_data = {}
         status_code = 0
         if validated:
