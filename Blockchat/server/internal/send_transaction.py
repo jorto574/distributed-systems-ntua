@@ -38,6 +38,7 @@ def send_transaction():
         )
         if success:
             my_state.add_transaction(new_transaction)
+            return "Transaction validated from all nodes"
         else:
             broadcast(
                 "revokeTransaction",
@@ -45,5 +46,6 @@ def send_transaction():
                 my_state.wallets,
                 my_state.my_wallet.address,
             )
-
-    return "Transaction broadcasted to all nodes"
+            return "Transaction broadcasted but then was revoked"
+    else:
+        return "Transaction was not valid and was not broadcasted"

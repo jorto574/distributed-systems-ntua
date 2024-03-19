@@ -110,19 +110,21 @@ class State:
 
         receiver_public_key = transaction.receiver_address
         receiver_wallet = self.find_wallet_from_public_key(receiver_public_key)
-
+        breakpoint()
         enough_amount = False
-        fees = 0
         if transaction.amount >= 0:
-            fees += ceil(transaction.amount + (0.3) * transaction.amount)
+            fees = (0.3) * transaction.amount
+            total_amount = ceil(transaction.amount + fees)
 
         if transaction.message != "":
-            fees += len(transaction.message)
+            fees = len(transaction.message)
+            total_amount = fees
 
-        if fees > sender_wallet.amount:
+        if total_amount > sender_wallet.amount:
             enough_amount = False
         else:
             enough_amount = True
+            self.fees += fees
 
         if not enough_amount:
             if verbose:
@@ -131,6 +133,6 @@ class State:
                 )
             return False
 
-        sender_wallet.amount -= transaction.amount + fees
-        receiver_wallet.amount += transaction.amount
+        sender_wallet.amount -= total_amount
+        receiver_wallet.amount += total_amount
         return True
