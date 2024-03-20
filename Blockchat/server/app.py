@@ -17,7 +17,10 @@ from external.revoke_block import revoke_block_bp
 
 app = Flask(__name__)
 
-load_dotenv("../config.env")
+previous_directory_full_path = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+load_dotenv(f"{previous_directory_full_path}/config.env")
 
 URL = os.environ.get("URL")
 PORT = os.environ.get("PORT")

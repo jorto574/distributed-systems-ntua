@@ -10,7 +10,7 @@ from cli.send_message import send_message
 from cli.view import view
 from cli.server_check import server_check
 
-load_dotenv("config.env")
+load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
 url = os.environ.get("URL")
 port = os.environ.get("PORT")
