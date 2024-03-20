@@ -22,7 +22,7 @@ def init_bootstrap(url, port, node_num):
     )
 
     # Initiate the blockchain
-    my_blockchain = Blockchain([], capacity=node_num)
+    my_blockchain = Blockchain([], capacity=node_num + 1)
 
     # Create genesis_block
     index = 0
@@ -32,6 +32,7 @@ def init_bootstrap(url, port, node_num):
 
     previous_hash = 1
     genesis_block = Block(index, timestamp, transactions, validator, previous_hash)
+    print(f"genesis_block.current_hash = {genesis_block.current_hash}")
 
     # Add genesis block to the blockchain
     my_blockchain.add_block(genesis_block)

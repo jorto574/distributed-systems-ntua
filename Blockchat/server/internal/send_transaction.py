@@ -36,16 +36,23 @@ def send_transaction():
             my_state.wallets,
             my_state.my_wallet.address,
         )
+        # a transaction is added only if all nodes know that is has been validated from everyone
         if success:
-            my_state.add_transaction(new_transaction)
-            return "Transaction validated from all nodes"
-        else:
             broadcast(
-                "revokeTransaction",
+                "addTransaction",
                 {"transaction": new_transaction.to_dict()},
                 my_state.wallets,
                 my_state.my_wallet.address,
             )
-            return "Transaction broadcasted but then was revoked"
+            my_state.add_transaction(new_transaction)
+            return "Transaction validated from all nodes"
+        # else:
+        #     broadcast(
+        #         "revokeTransaction",
+        #         {"transaction": new_transaction.to_dict()},
+        #         my_state.wallets,
+        #         my_state.my_wallet.address,
+        #     )
+        #     return "Transaction broadcasted but then was revoked"
     else:
         return "Transaction was not valid and was not broadcasted"

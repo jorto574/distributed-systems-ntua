@@ -28,11 +28,4 @@ def proof_of_stake(stakes, seed):
         random_number = random.randint(0, node_num - 1)
         validator = random_number
 
-    # print(total_stakes)
-    # print(lottary)
-    # print(random_number)
-    # print("validator: " + str(validator))
-
-
-if __name__ == "__main__":
-    proof_of_stake([10, 20, 12, 27, 42], 8001)
+    return validator

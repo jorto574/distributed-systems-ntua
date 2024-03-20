@@ -6,6 +6,7 @@ class Blockchain:
     def __init__(self, block_list: list[Block], capacity):
         self.block_list = block_list
         self.transaction_inbox = {}
+        self.blockchain_transactions = {}
         self.capacity = capacity
 
     def add_block(self, block):

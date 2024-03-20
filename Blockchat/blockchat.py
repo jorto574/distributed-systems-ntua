@@ -38,7 +38,7 @@ class BlockchatCLI(cmd2.Cmd):
             send_coins(address, recipient_id, amount)
         except:
             print("Usage:")
-            print("  t <recipient_id> <amount>       Send a me")
+            print("  t <recipient_id> <amount>       Send coins")
 
     def do_m(self, arg):
         """Send a message"""
