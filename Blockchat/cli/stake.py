@@ -15,4 +15,5 @@ def stake(amount):
 
 def current_stake():
     stake = 10
-    print(f"Current stake is {stake} BCC")
+    address, payload = None, None  # TODO
+    send_request("POST", address, "view_stake", payload)
