@@ -38,11 +38,12 @@ class PrivateWallet:
 
 
 class PublicWallet:
-    def __init__(self, node_id, node_address, public_key, amount):
+    def __init__(self, node_id, node_address, public_key, amount, stake=0):
         self.node_id = node_id
         self.node_address = node_address
         self.public_key = public_key
         self.amount = amount
+        self.stake = stake
 
     def to_dict(self):
         return {
@@ -50,6 +51,7 @@ class PublicWallet:
             "node_address": self.node_address,
             "public_key": self.public_key,
             "amount": self.amount,
+            "stake": self.stake,
         }
 
     @classmethod
@@ -59,4 +61,5 @@ class PublicWallet:
             wallet_dict["node_address"],
             wallet_dict["public_key"],
             wallet_dict["amount"],
+            wallet_dict["stake"],
         )

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, current_app
-from models.transaction
+from models.transaction import Transaction
 
 add_transaction_bp = Blueprint("add_transaction", __name__)
 

@@ -7,6 +7,7 @@ from utils.init_utils import init_bootstrap, init_node
 from internal.home import home_bp
 from internal.show_state import state_bp
 from internal.send_transaction import send_transaction_bp
+from internal.set_stake import set_stake_bp
 
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
 from external.receive_init_from_bootstrap import receive_init_from_bootstap_bp
@@ -33,6 +34,7 @@ app.config["node_count"] = 0
 app.register_blueprint(home_bp)
 app.register_blueprint(state_bp)
 app.register_blueprint(send_transaction_bp)
+app.register_blueprint(set_stake_bp)
 
 # External Blueprints
 if app.config["is_bootstrap"] == "1":
