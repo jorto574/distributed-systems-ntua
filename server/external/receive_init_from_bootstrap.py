@@ -24,7 +24,10 @@ def receive_init_from_bootstap():
         state = State(blockchain, wallets, node_num, my_wallet)
 
         for transaction in transactions:
-            state.add_transaction(Transaction.from_dict(transaction))
+            transaction = Transaction.from_dict(transaction)
+            transaction_key = state.transaction_unique_id(transaction)
+            state.transaction_waiting_room[transaction_key] = transaction
+            state.add_transaction(transaction_key)
 
         current_app.config["my_state"] = state
 

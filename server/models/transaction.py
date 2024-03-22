@@ -3,18 +3,17 @@ class Transaction:
 
     def __init__(
         self,
-        sender_address: list[str],
-        receiver_address: list[str],
+        sender_public_key: list[str],
+        receiver_public_key: list[str],
         type_of_transaction: str,
         amount: int,
         message: str,
+        nonce: int,
         signature=None,
     ):
-        Transaction.global_nonce += 1
-
-        self.nonce = Transaction.global_nonce
-        self.sender_address = sender_address
-        self.receiver_address = receiver_address
+        self.nonce = nonce
+        self.sender_public_key = sender_public_key
+        self.receiver_public_key = receiver_public_key
         self.type_of_transaction = type_of_transaction
         self.amount = amount
         self.message = message
@@ -23,9 +22,11 @@ class Transaction:
     # Return the concatenation of every field of a transaction
     def create_transaction_string(self):
         str_nonce = str(self.nonce)
-        str_sender_address = str(self.sender_address[0]) + str(self.sender_address[1])
-        str_receiver_address = str(self.receiver_address[0]) + str(
-            self.receiver_address[1]
+        str_sender_public_key = str(self.sender_public_key[0]) + str(
+            self.sender_public_key[1]
+        )
+        str_receiver_public_key = str(self.receiver_public_key[0]) + str(
+            self.receiver_public_key[1]
         )
         str_type_of_transaction = str(self.type_of_transaction)
         str_amount = str(self.amount)
@@ -33,8 +34,8 @@ class Transaction:
 
         message_to_hash = (
             str_nonce
-            + str_sender_address
-            + str_receiver_address
+            + str_sender_public_key
+            + str_receiver_public_key
             + str_type_of_transaction
             + str_amount
             + str_message
@@ -45,8 +46,8 @@ class Transaction:
     def to_dict(self):
         return {
             "nonce": self.nonce,
-            "sender_address": self.sender_address,
-            "receiver_address": self.receiver_address,
+            "sender_public_key": self.sender_public_key,
+            "receiver_public_key": self.receiver_public_key,
             "type_of_transaction": self.type_of_transaction,
             "amount": self.amount,
             "message": self.message,
@@ -56,10 +57,11 @@ class Transaction:
     @classmethod
     def from_dict(cls, transaction_dict):
         return cls(
-            transaction_dict["sender_address"],
-            transaction_dict["receiver_address"],
+            transaction_dict["sender_public_key"],
+            transaction_dict["receiver_public_key"],
             transaction_dict["type_of_transaction"],
             transaction_dict["amount"],
             transaction_dict["message"],
+            transaction_dict["nonce"],
             transaction_dict["signature"],
         )

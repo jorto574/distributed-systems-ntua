@@ -13,12 +13,13 @@ def validate_transaction():
         my_state = current_app.config["my_state"]
         node_id = my_state.my_wallet.node_id
         receiver_id = my_state.find_wallet_from_public_key(
-            incoming_transaction.receiver_address
+            incoming_transaction.receiver_public_key
         ).node_id
 
-        sender_address = tuple(incoming_transaction.sender_address)
-        nonce = incoming_transaction.nonce
-        key = (sender_address, nonce)
+        # TODO: continue work
+        # sender_public_key = tuple(incoming_transaction.sender_public_key)
+        # nonce = incoming_transaction.nonce
+        key = (sender_public_key, nonce)
 
         if key in my_state.blockchain.blockchain_transactions:
             del my_state.blockchain.blockchain_transaction
@@ -30,9 +31,12 @@ def validate_transaction():
         transaction_validated = my_state.validate_transaction(incoming_transaction)
         response_data = {}
         status_code = 0
+
+        # TODO: continue work
+        # sender_id = my_state.public_key_to_node_id[transaction]
         if transaction_validated:
             print(
-                f"Node {node_id} validated the transaction with (nonce, sender_address) = ({incoming_transaction.nonce}, {incoming_transaction.sender_address})"
+                f"Node {node_id} validated the transaction with (nonce, sender_id) = ({incoming_transaction.nonce}, {sender_id})"
             )
             response_data = {"status": "success"}
             status_code = 200
@@ -43,7 +47,7 @@ def validate_transaction():
                 )
         else:
             print(
-                f"Node {node_id} rejected the transaction with (nonce, sender_address) = ({incoming_transaction.nonce}, {incoming_transaction.sender_address})"
+                f"Node {node_id} rejected the transaction with (nonce, sender_public_key) = ({incoming_transaction.nonce}, {incoming_transaction.sender_public_key})"
             )
             response_data = {"status": "failed"}
             status_code = 401

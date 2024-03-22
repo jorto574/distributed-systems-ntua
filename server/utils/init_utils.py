@@ -16,7 +16,7 @@ def init_bootstrap(url, port, node_num):
     amount = 1000 * node_num
 
     new_transaction = my_wallet.create_transaction(
-        [0, 0], my_wallet.public_key, "coins", amount, "Genesis transaction"
+        [0, 0], my_wallet.public_key, "coins", amount, "Genesis transaction", 0
     )
 
     # Initiate the blockchain
@@ -42,6 +42,7 @@ def init_bootstrap(url, port, node_num):
 
     # TODO add a stake
     my_state = State(my_blockchain, [my_wallet_for_state], node_num, my_wallet)
+    my_state.my_nonce += 1
 
     return my_state
 

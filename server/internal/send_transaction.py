@@ -24,7 +24,12 @@ def send_transaction():
         message = ""
 
     new_transaction = my_state.my_wallet.create_transaction(
-        my_state.my_wallet.public_key, recipient_public_key, type, amount, message
+        my_state.my_wallet.public_key,
+        recipient_public_key,
+        type,
+        amount,
+        message,
+        my_state.get_my_nonce(),
     )
 
     validated = my_state.validate_transaction(new_transaction)
@@ -36,15 +41,17 @@ def send_transaction():
             my_state.wallets,
             my_state.my_wallet.node_address,
         )
+        # breakpoint()
         # a transaction is added only if all nodes know that is has been validated from everyone
         if success:
+            transaction_key = my_state.transaction_unique_id(new_transaction)
             broadcast(
                 "addTransaction",
-                {"transaction": new_transaction.to_dict()},
+                {"transaction_key": list(transaction_key)},
                 my_state.wallets,
                 my_state.my_wallet.node_address,
             )
-            my_state.add_transaction(new_transaction)
+            my_state.add_transaction(transaction_key)
             return "Transaction validated from all nodes"
         # else:
         #     broadcast(

@@ -9,10 +9,21 @@ class PrivateWallet:
         self.public_key, self.private_key = generate_key_pairs()
 
     def create_transaction(
-        self, sender_address, receiver_address, type_of_transaction, amount, message
+        self,
+        sender_public_key,
+        receiver_public_key,
+        type_of_transaction,
+        amount,
+        message,
+        nonce,
     ):
         new_transaction = Transaction(
-            sender_address, receiver_address, type_of_transaction, amount, message
+            sender_public_key,
+            receiver_public_key,
+            type_of_transaction,
+            amount,
+            message,
+            nonce,
         )
 
         def sign_transaction(transaction):
@@ -29,7 +40,7 @@ class PrivateWallet:
         def verify_transaction_signature():
             return verify_signature(
                 transaction.get_signature,
-                transaction.get_sender_address(),
+                transaction.get_sender_public_key(),
                 transaction.create_transaction_string(),
             )
 

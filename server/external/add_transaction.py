@@ -5,20 +5,14 @@ add_transaction_bp = Blueprint("add_transaction", __name__)
 
 
 @add_transaction_bp.route("/addTransaction", methods=["POST"])
-def revoke_block():
+def add_transaction():
     my_state = current_app.config["my_state"]
     data = request.json
-    transaction = Transaction.from_dict(data["transaction"])
+    transaction_key = tuple(data["transaction_key"])
 
-    self.fees += fees
-    sender_wallet.amount -= total_amount
-    receiver_wallet.amount += total_amount
+    my_state.add_transaction(transaction_key)
 
-    most_recent_block = my_state.blockchain.block_list[-1]
-    if most_recent_block.current_hash == block.current_hash:
-        my_state.blockchain.block_list[-1]
-
-    response = {"status": "Block revoked"}
+    response = {"status": f"Transaction {transaction_key} added to transaction inbox"}
     status_code = 200
 
     return response, status_code
