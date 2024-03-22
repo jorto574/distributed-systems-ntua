@@ -6,7 +6,6 @@ from models.blockchain import Blockchain
 from models.transaction import Transaction
 from models.wallet import PublicWallet, PrivateWallet
 from models.state import State
-from models.node import Node
 
 
 def init_bootstrap(url, port, node_num):

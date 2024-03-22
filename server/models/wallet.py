@@ -1,6 +1,5 @@
 from utils.crypto import generate_key_pairs, sign_message, verify_signature
 from models.transaction import Transaction
-from models.node import Node
 
 
 class PrivateWallet:
