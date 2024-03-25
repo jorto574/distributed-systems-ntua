@@ -18,8 +18,7 @@ def validate_block():
         status_code = 0
 
         if block_validated:
-            my_state.blockchain.add_block(incoming_block)
-            my_state.update_transaction_inbox(incoming_block)
+            my_state.block_waiting_room[incoming_block.index] = incoming_block
             print(
                 f"Node {node_id} validated the block with index = {incoming_block.index}"
             )

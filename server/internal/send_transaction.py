@@ -31,20 +31,22 @@ def send_transaction():
         message,
         my_state.get_my_nonce(),
     )
-
     validated = my_state.validate_transaction(new_transaction)
+    transaction_key = my_state.transaction_unique_id(new_transaction)
 
     if validated:
+        print(f"Broadcasting valid transaction with key {transaction_key}")
         success = broadcast(
             "validateTransaction",
             {"transaction": new_transaction.to_dict()},
             my_state.wallets,
             my_state.my_wallet.node_address,
         )
-        # breakpoint()
+        print(f"P1: Transaction with key {transaction_key} validated by all nodes")
+
         # a transaction is added only if all nodes know that is has been validated from everyone
         if success:
-            transaction_key = my_state.transaction_unique_id(new_transaction)
+
             broadcast(
                 "addTransaction",
                 {"transaction_key": list(transaction_key)},
@@ -52,14 +54,7 @@ def send_transaction():
                 my_state.my_wallet.node_address,
             )
             my_state.add_transaction(transaction_key)
+            print(f"P2: Transaction with key {transaction_key} added to all nodes")
             return "Transaction validated from all nodes"
-        # else:
-        #     broadcast(
-        #         "revokeTransaction",
-        #         {"transaction": new_transaction.to_dict()},
-        #         my_state.wallets,
-        #         my_state.my_wallet.address,
-        #     )
-        #     return "Transaction broadcasted but then was revoked"
     else:
         return "Transaction was not valid and was not broadcasted"

@@ -27,7 +27,7 @@ def receive_init_from_bootstap():
             transaction = Transaction.from_dict(transaction)
             transaction_key = state.transaction_unique_id(transaction)
             state.transaction_waiting_room[transaction_key] = transaction
-            state.add_transaction(transaction_key)
+            state.add_transaction(transaction_key, is_init=True)
 
         current_app.config["my_state"] = state
 

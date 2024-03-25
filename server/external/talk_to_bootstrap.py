@@ -43,7 +43,7 @@ def talk_to_bootstrap():
 
         transaction_key = my_state.transaction_unique_id(new_transaction)
         my_state.transaction_waiting_room[transaction_key] = new_transaction
-        my_state.add_transaction(transaction_key)
+        my_state.add_transaction(transaction_key, is_init=True)
 
         response_data = {"status": "success", "id": node_id}
 

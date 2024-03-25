@@ -51,7 +51,7 @@ class State:
             wallets.append(PublicWallet(**wallet_data))
         return wallets
 
-    def add_transaction(self, transaction_key):
+    def add_transaction(self, transaction_key, is_init=False):
         transaction = self.transaction_waiting_room[transaction_key]
         self.blockchain.transaction_inbox[transaction_key] = transaction
         del self.transaction_waiting_room[transaction_key]
@@ -59,52 +59,50 @@ class State:
         receiver_wallet = self.find_wallet_from_public_key(
             transaction.receiver_public_key
         )
-        # breakpoint()
-        if transaction.type_of_transaction == "coins":
-            fees = (0.3) * transaction.amount
-            total_amount = ceil(transaction.amount + fees)
-        elif transaction.type_of_transaction == "message":
-            fees = len(transaction.message)
-            total_amount = fees
+        if not is_init:
+            if transaction.type_of_transaction == "coins":
+                fees = (0.3) * transaction.amount
+                total_amount = ceil(transaction.amount + fees)
+            elif transaction.type_of_transaction == "message":
+                fees = len(transaction.message)
+                total_amount = fees
 
-        self.fees += fees
-        sender_wallet.amount -= total_amount
-        receiver_wallet.amount += total_amount
+            self.fees += fees
+            sender_wallet.amount -= total_amount
+            receiver_wallet.amount += total_amount - fees
 
-        # # if capacity is full, a new block must be created
-        # if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
-        #     new_block_index = self.blockchain.block_list[-1].index + 1
-        #     print(
-        #         f"Block with index {new_block_index} has closed. Proof of stake begins"
-        #     )
-        #     seed = self.blockchain.block_list[-1].current_hash
-        #     print(f"seed = {seed}")
-        #     seed = int(("0x" + str(seed)), 16)
-        #     validator_id = proof_of_stake(self.stakes, seed)
-        #     print(f"Proof of stake ended with validator node_id {validator_id}")
+        # if capacity is full, a new block must be created
+        if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
+            new_block_index = self.blockchain.block_list[-1].index + 1
+            print(
+                f"Block with index {new_block_index} has closed. Proof of stake begins"
+            )
+            seed = self.blockchain.block_list[-1].current_hash
+            print(f"seed = {seed}")
+            seed = int(("0x" + str(seed)), 16)
+            validator_id = proof_of_stake(self.stakes, seed)
+            print(f"Proof of stake ended with validator node_id {validator_id}")
 
-        #     # if current node is validator, he mints the new block
-        #     if validator_id == self.my_wallet.node_id:
-        #         minted_block = self.mint_block()
-        #         breakpoint()
-        #         print(
-        #             f"Broadcasting block with index {minted_block.index} to all nodes"
-        #         )
-        #         # success is true if the validation of the block from every node is correct
-        #         success = self.broadcast_block(minted_block)
-        #         if success:
-        #             # add block to blockchain if everyone validated it
-        #             print(
-        #                 f"Block block with index {minted_block.index} is validated from all nodes! Adding it to the blockchain"
-        #             )
-        #             self.add_block(minted_block)
-        #             self.update_transaction_inbox(minted_block)
-        #         # if one or more nodes have rejected the block, revoke it
-        #         else:
-        #             print(
-        #                 f"Block block with index {minted_block.index} is rejected from some nodes! Revoking it..."
-        #             )
-        #             self.revoke_block(minted_block)
+            # if current node is validator, he mints the new block
+            if validator_id == self.my_wallet.node_id:
+                breakpoint()
+                minted_block = self.mint_block()
+                print(
+                    f"Broadcasting block with index {minted_block.index} to all nodes"
+                )
+                # success is true if the validation of the block from every node is correct
+                success = self.broadcast_block(minted_block)
+                if success:
+                    # if every node has validated the block, broadcast to all nodes that they must add the block to their blockchain
+                    self.broadcast_add_block(minted_block.index)
+
+                    print(
+                        f"Block block with index {minted_block.index} is validated from all nodes! Adding it to the blockchain"
+                    )
+
+                    # the validator aslo adds the block
+                    self.add_block(minted_block)
+                    self.update_transaction_inbox(minted_block)
 
     def mint_block(self):
         transactions_list = list(self.blockchain.transaction_inbox.values())
@@ -114,25 +112,24 @@ class State:
             time.time(),
             transactions_list,
             validator_public_key,
-            self.blockchain.create_block_hash(),
             self.blockchain.block_list[-1].current_hash,
         )
         return new_block
 
     def broadcast_block(self, block):
-        broadcast(
+        return broadcast(
             "/validateBlock",
             {"block": block.to_dict()},
             self.wallets,
-            self.my_wallet.address,
+            self.my_wallet.node_address,
         )
 
-    def revoke_block(self, block):
+    def broadcast_add_block(self, index):
         broadcast(
-            "/revokeBlock",
-            {"block": block.to_dict()},
+            "/addBlock",
+            {"index": index},
             self.wallets,
-            self.my_wallet.address,
+            self.my_wallet.node_address,
         )
 
     def add_wallet(self, wallet):

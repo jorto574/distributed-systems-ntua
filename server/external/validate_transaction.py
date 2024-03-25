@@ -16,13 +16,9 @@ def validate_transaction():
             incoming_transaction.receiver_public_key
         ).node_id
 
-        # TODO: continue work
-        # sender_public_key = tuple(incoming_transaction.sender_public_key)
-        # nonce = incoming_transaction.nonce
-        key = (sender_public_key, nonce)
+        key = my_state.transaction_unique_id(incoming_transaction)
 
         if key in my_state.blockchain.blockchain_transactions:
-            del my_state.blockchain.blockchain_transaction
             response_data = {"status": "transaction already in blockchain"}
             response = jsonify(response_data)
             status_code = 200
@@ -32,11 +28,9 @@ def validate_transaction():
         response_data = {}
         status_code = 0
 
-        # TODO: continue work
-        # sender_id = my_state.public_key_to_node_id[transaction]
         if transaction_validated:
             print(
-                f"Node {node_id} validated the transaction with (nonce, sender_id) = ({incoming_transaction.nonce}, {sender_id})"
+                f"Node {node_id} validated the transaction with (sender_id,nonce) = {key}"
             )
             response_data = {"status": "success"}
             status_code = 200
