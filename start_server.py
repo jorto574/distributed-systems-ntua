@@ -4,9 +4,6 @@ import os
 if __name__ == "__main__":
     try:
         os.chdir("server")
+        subprocess.run(["python3", "app.py"])
     except:
-        try:
-            os.chdir("Blockchat/server")
-        except:
-            print('Internal error! File "server" not found.')
-    subprocess.run(["python3", "app.py"])
+        print("Internal error! 'server/' directory not found.")

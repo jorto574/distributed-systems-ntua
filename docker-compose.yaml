@@ -1,0 +1,17 @@
+# Run docker-compose up to run this file
+
+version: "3.8"
+
+services:
+  server:
+    build: ./server # Where the dockerfile exists
+    ports:
+      - 3000:3000
+    environment:
+      -
+  cli:
+    build: ./cli
+    ports:
+      - 3001:3001
+    environment:
+      -
