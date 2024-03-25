@@ -1,13 +1,13 @@
 FROM python:3.10.14-alpine3.19
 
-WORKDIR /usr/src/blockchat/server
+WORKDIR /usr/src/blockchat
 
-# TODO: package installation process
-RUN pip install
+RUN pip freeze > python_packages.txt
+RUN pip install -r python_packages.txt
 
-COPY ../start_server.py /usr/src/blockchat/
-COPY . /usr/src/blockchat/server/
-
+# TODO: fix exposed port
 EXPOSE 3000
 
-CMD []
+COPY . ./server
+
+CMD ["python3", "app.py"]

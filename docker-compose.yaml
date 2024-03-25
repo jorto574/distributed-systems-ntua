@@ -1,4 +1,4 @@
-# Run docker-compose up to run this file
+# Run "docker-compose up" to run this file
 
 version: "3.8"
 
@@ -6,12 +6,20 @@ services:
   server:
     build: ./server # Where the dockerfile exists
     ports:
+      # TODO: delete this comment
+      # host-port:container-port
+      # The host-port is the port in which the host machine listens to.
+      # The container port is the port in which the application running in the container listens to.
+      # If your application listens to the port 80, and you want your host machine to listen to the
+      # port 3000, then the result will be -> 3000:80. In the code the port 80 will be mentioned and
+      # the actual port that the host machine will listen to will be 3000.
       - 3000:3000
     environment:
-      -
+      PORT: 3000
   cli:
     build: ./cli
     ports:
-      - 3001:3001
+      # TODO: see what we'll do specifically with port mapping
+      - 3100:3100
     environment:
       -

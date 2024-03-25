@@ -1,12 +1,14 @@
 FROM python:3.10.14-alpine3.19
 
-WORKDIR /usr/src/blockchat/cli
+WORKDIR /usr/src/blockchat
 
-# TODO: package installation process
-RUN pip install
+RUN pip freeze > python_packages.txt
+RUN pip install -r python_packages.txt
 
-COPY . /usr/src/blockchat/cli
+# TODO: fix exposed port
+EXPOSE 3001
 
-EXPOSE 3000
+COPY . ./cli
 
-CMD []
+# TODO: check the directory of blockchat.py file
+CMD ["python3", "blockchat.py"]
