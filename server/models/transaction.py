@@ -1,3 +1,6 @@
+from math import ceil
+
+
 class Transaction:
     global_nonce = -1
 
@@ -10,6 +13,7 @@ class Transaction:
         message: str,
         nonce: int,
         signature=None,
+        is_init: int = 0,
     ):
         self.nonce = nonce
         self.sender_public_key = sender_public_key
@@ -18,6 +22,8 @@ class Transaction:
         self.amount = amount
         self.message = message
         self.signature = signature
+        self.is_init = is_init
+        self.fees, self.total_amount = self.compute_fees()
 
     # Return the concatenation of every field of a transaction
     def create_transaction_string(self):
@@ -52,6 +58,7 @@ class Transaction:
             "amount": self.amount,
             "message": self.message,
             "signature": self.signature,
+            "is_init": self.is_init,
         }
 
     @classmethod
@@ -64,4 +71,18 @@ class Transaction:
             transaction_dict["message"],
             transaction_dict["nonce"],
             transaction_dict["signature"],
+            transaction_dict["is_init"],
         )
+
+    def compute_fees(self):
+        if self.is_init == 1:
+            fees = 0
+            total_amount = 0
+        elif self.type_of_transaction == "coins":
+            fees = (0.3) * self.amount
+            total_amount = ceil(self.amount + fees)
+        elif self.type_of_transaction == "message":
+            fees = len(self.message)
+            total_amount = fees
+
+        return fees, total_amount

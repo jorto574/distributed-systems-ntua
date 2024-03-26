@@ -16,6 +16,7 @@ class PrivateWallet:
         amount,
         message,
         nonce,
+        is_init=0,
     ):
         new_transaction = Transaction(
             sender_public_key,
@@ -24,6 +25,7 @@ class PrivateWallet:
             amount,
             message,
             nonce,
+            is_init,
         )
 
         def sign_transaction(transaction):

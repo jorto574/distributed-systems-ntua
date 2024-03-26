@@ -46,8 +46,8 @@ class Block:
             block_dict["timestamp"],
             [Transaction.from_dict(t) for t in block_dict["transactions"]],
             block_dict["validator"],
-            block_dict["current_hash"],
             block_dict["previous_hash"],
+            block_dict["current_hash"],
         )
 
     # Creates block hash for the new block the be validated and added to the blockchain

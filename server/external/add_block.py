@@ -9,12 +9,13 @@ add_block_bp = Blueprint("addBlock", __name__)
 def add_block():
     try:
         data = request.json
-        block_index = Block.from_dict(data["index"])
+        block_index = data["index"]
         my_state = current_app.config["my_state"]
 
         block = my_state.block_waiting_room[block_index]
         del my_state.block_waiting_room[block_index]
         my_state.add_block(block)
+        my_state.update_transaction_inbox(block)
 
         response_data = {}
 

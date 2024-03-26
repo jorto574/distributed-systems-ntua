@@ -9,6 +9,8 @@ from cli.send_coins import send_coins
 from cli.send_message import send_message
 from cli.view import view
 from cli.server_check import server_check
+from cli.view import view
+from cli.balance import balance
 
 load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
@@ -57,7 +59,10 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_view(self, arg):
         """View command"""
-        view()
+        view(address)
+
+    def do_balance(self, args):
+        balance(address)
 
 
 if __name__ == "__main__":

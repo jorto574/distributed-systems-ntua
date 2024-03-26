@@ -36,6 +36,7 @@ def talk_to_bootstrap():
             f"Welcome to Blockchat node {node_id}",
             my_state.get_my_nonce(),
         )
+        new_transaction.is_init = 1
 
         my_state.wallets[0].amount -= 1000
         node_wallet = PublicWallet(node_id, node_address, node_public_key, 1000)

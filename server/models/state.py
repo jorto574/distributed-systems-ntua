@@ -7,6 +7,7 @@ from utils.proof_of_stake import proof_of_stake
 from utils.crypto import verify_signature
 import time
 from math import ceil
+import threading
 
 
 class State:
@@ -23,7 +24,7 @@ class State:
         self.current_fees = 0  # total fees corresponding to transactions of one block
         self.test = "state"
         self.my_wallet = my_wallet
-        self.fees = 0
+        # self.fees = 0
         # Waiting rooms for 2PC implementation: validated transactions/blocks watining the OK from the coordinator.
         # In block_waiting_room coordinator is the validator in transaction_waiting_room coordinator is the sender.
         self.block_waiting_room = {}
@@ -60,17 +61,15 @@ class State:
             transaction.receiver_public_key
         )
         if not is_init:
-            if transaction.type_of_transaction == "coins":
-                fees = (0.3) * transaction.amount
-                total_amount = ceil(transaction.amount + fees)
-            elif transaction.type_of_transaction == "message":
-                fees = len(transaction.message)
-                total_amount = fees
-
-            self.fees += fees
+            fees = transaction.fees
+            total_amount = transaction.total_amount
+            # self.fees += fees
             sender_wallet.amount -= total_amount
             receiver_wallet.amount += total_amount - fees
 
+            threading.Thread(target=self.block_val_porocess, args=()).start()
+
+    def block_val_porocess(self):
         # if capacity is full, a new block must be created
         if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
             new_block_index = self.blockchain.block_list[-1].index + 1
@@ -78,14 +77,13 @@ class State:
                 f"Block with index {new_block_index} has closed. Proof of stake begins"
             )
             seed = self.blockchain.block_list[-1].current_hash
-            print(f"seed = {seed}")
+
             seed = int(("0x" + str(seed)), 16)
             validator_id = proof_of_stake(self.stakes, seed)
             print(f"Proof of stake ended with validator node_id {validator_id}")
 
             # if current node is validator, he mints the new block
             if validator_id == self.my_wallet.node_id:
-                breakpoint()
                 minted_block = self.mint_block()
                 print(
                     f"Broadcasting block with index {minted_block.index} to all nodes"
@@ -159,12 +157,7 @@ class State:
         sender_wallet = self.find_wallet_from_public_key(sender_public_key)
 
         enough_amount = False
-        if transaction.type_of_transaction == "coins":
-            fees = (0.3) * transaction.amount
-            total_amount = ceil(transaction.amount + fees)
-        elif transaction.type_of_transaction == "message":
-            fees = len(transaction.message)
-            total_amount = fees
+        total_amount = transaction.total_amount
 
         if total_amount > sender_wallet.amount:
             enough_amount = False
@@ -182,7 +175,6 @@ class State:
         self.transaction_waiting_room[self.transaction_unique_id(transaction)] = (
             transaction
         )
-
         return True
 
     def validate_block(self, block):
@@ -212,11 +204,13 @@ class State:
         return key
 
     def update_transaction_inbox(self, block):
+        validator_id = self.public_key_to_node_id[tuple(block.validator)]
         for transaction in block.transactions:
             key = self.transaction_unique_id(transaction)
-            self.blockchain.blockchain_transactions[key] = transaction
+            fees = transaction.fees
+            self.wallets[validator_id].amount += fees
 
-        for transaction_key in self.blockchain.blockchain_transactions.keys():
-            if transaction_key in self.blockchain.transaction_inbox:
-                del self.blockchain.transaction_inbox[transaction_key]
-                del self.blockchain.blockchain_transactions[transaction_key]
+            if key in self.blockchain.transaction_inbox:
+                del self.blockchain.transaction_inbox[key]
+            else:
+                self.blockchain.blockchain_transactions[key] = transaction
