@@ -75,14 +75,22 @@ class Transaction:
         )
 
     def compute_fees(self):
+        # Initial transactions from bootstrap
         if self.is_init == 1:
             fees = 0
             total_amount = 0
+            
         elif self.type_of_transaction == "coins":
             fees = (0.3) * self.amount
             total_amount = ceil(self.amount + fees)
         elif self.type_of_transaction == "message":
             fees = len(self.message)
             total_amount = fees
-
+        
+        # Set stake transactions: this must change if not 2PC!!!!
+        elif self.receiver_public_key == 0:
+            fees = 0 
+            total_amount = self.amount
+        #
+            
         return fees, total_amount

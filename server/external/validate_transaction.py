@@ -35,10 +35,6 @@ def validate_transaction():
             response_data = {"status": "success"}
             status_code = 200
 
-            if node_id == receiver_id:
-                print(
-                    f"You've received a transaction of type {incoming_transaction.type_of_transaction}"
-                )
         else:
             print(
                 f"Node {node_id} rejected the transaction with (nonce, sender_public_key) = ({incoming_transaction.nonce}, {incoming_transaction.sender_public_key})"

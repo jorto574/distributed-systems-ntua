@@ -1,19 +1,19 @@
+import os
+from dotenv import load_dotenv
+
 from server.utils.send_http_request import send_http_request
 
 from server.models.transaction import Transaction
 
+load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
-def stake(amount):
-    # Implement your logic for staking a certain amount
-    print(f"Staking {amount} coins")
-    recipient_id = None  # TODO
-    payload = {"recipient_id": recipient_id, "stake_value": amount}
-
-    address = None  # TODO
-    send_http_request("POST", address, "set_stake", payload)
+def stake(amount, address, debug:bool = False):
+    if debug:
+        print(f"Staking {amount} coins")
+    response = send_http_request("POST", address, "stake/set", {"stake_value": amount})
 
 
 def current_stake():
-    stake = 10
     address, payload = None, None  # TODO
-    send_http_request("POST", address, "view_stake", payload)
+    payload = {}
+    send_http_request("POST", address, "stake/view", payload)

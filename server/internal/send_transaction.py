@@ -14,7 +14,10 @@ def send_transaction():
     type = data["type"]
     body = data["body"]
     recipient_id = int(data["recipient_id"])
-    recipient_public_key = my_state.wallets[recipient_id].public_key
+    if recipient_id == -1:
+        recipient_public_key = 0
+    else:
+        recipient_public_key = my_state.wallets[recipient_id].public_key
 
     if type == "message":
         amount = 0
@@ -33,6 +36,11 @@ def send_transaction():
     )
     validated = my_state.validate_transaction(new_transaction)
     transaction_key = my_state.transaction_unique_id(new_transaction)
+
+    if type == "message":
+        my_state.conversations[recipient_id].append(
+            ["me_" + str(transaction_key[1]), message]
+        )
 
     if validated:
         print(f"Broadcasting valid transaction with key {transaction_key}")

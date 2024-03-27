@@ -18,6 +18,7 @@ def add_transaction():
         return response, status_code
 
     my_state.add_transaction(transaction_key)
+    my_state.stakes
 
     response = {"status": f"Transaction {transaction_key} added to transaction inbox"}
     status_code = 200

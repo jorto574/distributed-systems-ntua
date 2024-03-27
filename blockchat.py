@@ -11,6 +11,7 @@ from cli.view import view
 from cli.server_check import server_check
 from cli.view import view
 from cli.balance import balance
+from cli.conversations import conversations
 
 load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
@@ -55,7 +56,7 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_stake(self, arg):
         """Stake a certain amount"""
-        stake(arg)
+        stake(address)
 
     def do_view(self, arg):
         """View command"""
@@ -63,6 +64,9 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_balance(self, args):
         balance(address)
+
+    def do_conversations(self, args):
+        conversations(address)
 
 
 if __name__ == "__main__":

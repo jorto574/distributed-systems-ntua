@@ -7,10 +7,10 @@ from utils.init_utils import init_bootstrap, init_node
 from internal.home import home_bp
 from internal.show_state import state_bp
 from internal.send_transaction import send_transaction_bp
-from internal.set_stake import set_stake_bp
-from internal.view_stake import view_stake_bp
+from internal.stake import stake_bp
 from internal.view import view_bp
 from internal.balance import balance_bp
+from internal.conversations import conversations_bp
 
 
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
@@ -38,10 +38,10 @@ app.config["node_count"] = 0
 app.register_blueprint(home_bp)
 app.register_blueprint(state_bp)
 app.register_blueprint(send_transaction_bp)
-app.register_blueprint(set_stake_bp)
-app.register_blueprint(view_stake_bp)
+app.register_blueprint(stake_bp)
 app.register_blueprint(view_bp)
 app.register_blueprint(balance_bp)
+app.register_blueprint(conversations_bp)
 
 
 # External Blueprints
