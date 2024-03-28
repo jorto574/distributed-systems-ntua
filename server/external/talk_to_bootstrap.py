@@ -38,13 +38,13 @@ def talk_to_bootstrap():
         )
         new_transaction.is_init = 1
 
-        my_state.wallets[0].amount -= 1000
+        my_state.wallets[0].hard_amount -= 1000
+        my_state.wallets[0].soft_amount -= 1000
         node_wallet = PublicWallet(node_id, node_address, node_public_key, 1000)
         my_state.add_wallet(node_wallet)
 
         transaction_key = my_state.transaction_unique_id(new_transaction)
-        my_state.transaction_waiting_room[transaction_key] = new_transaction
-        my_state.add_transaction(transaction_key, is_init=True)
+        my_state.blockchain.transaction_inbox[transaction_key] = new_transaction
 
         response_data = {"status": "success", "id": node_id}
 

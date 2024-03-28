@@ -8,7 +8,7 @@ class Transaction:
         self,
         sender_public_key: list[str],
         receiver_public_key: list[str],
-        type_of_transaction: str,
+        type: str,
         amount: int,
         message: str,
         nonce: int,
@@ -18,7 +18,7 @@ class Transaction:
         self.nonce = nonce
         self.sender_public_key = sender_public_key
         self.receiver_public_key = receiver_public_key
-        self.type_of_transaction = type_of_transaction
+        self.type = type
         self.amount = amount
         self.message = message
         self.signature = signature
@@ -31,10 +31,13 @@ class Transaction:
         str_sender_public_key = str(self.sender_public_key[0]) + str(
             self.sender_public_key[1]
         )
-        str_receiver_public_key = str(self.receiver_public_key[0]) + str(
-            self.receiver_public_key[1]
-        )
-        str_type_of_transaction = str(self.type_of_transaction)
+        if self.type == "stake":
+            str_receiver_public_key = str(self.receiver_public_key)
+        else:
+            str_receiver_public_key = str(self.receiver_public_key[0]) + str(
+                self.receiver_public_key[1]
+            )
+        str_type_of_transaction = str(self.type)
         str_amount = str(self.amount)
         str_message = str(self.message)
 
@@ -54,7 +57,7 @@ class Transaction:
             "nonce": self.nonce,
             "sender_public_key": self.sender_public_key,
             "receiver_public_key": self.receiver_public_key,
-            "type_of_transaction": self.type_of_transaction,
+            "type": self.type,
             "amount": self.amount,
             "message": self.message,
             "signature": self.signature,
@@ -66,7 +69,7 @@ class Transaction:
         return cls(
             transaction_dict["sender_public_key"],
             transaction_dict["receiver_public_key"],
-            transaction_dict["type_of_transaction"],
+            transaction_dict["type"],
             transaction_dict["amount"],
             transaction_dict["message"],
             transaction_dict["nonce"],
@@ -75,22 +78,17 @@ class Transaction:
         )
 
     def compute_fees(self):
-        # Initial transactions from bootstrap
-        if self.is_init == 1:
+        if self.is_init == 1:  # Initial transactions from bootstrap
             fees = 0
             total_amount = 0
-            
-        elif self.type_of_transaction == "coins":
+        elif self.type == "coins":
             fees = (0.3) * self.amount
             total_amount = ceil(self.amount + fees)
-        elif self.type_of_transaction == "message":
+        elif self.type == "message":
             fees = len(self.message)
             total_amount = fees
-        
-        # Set stake transactions: this must change if not 2PC!!!!
-        elif self.receiver_public_key == 0:
-            fees = 0 
+        elif self.type == "stake":
+            fees = 0
             total_amount = self.amount
-        #
-            
+
         return fees, total_amount

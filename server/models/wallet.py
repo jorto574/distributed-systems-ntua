@@ -12,7 +12,7 @@ class PrivateWallet:
         self,
         sender_public_key,
         receiver_public_key,
-        type_of_transaction,
+        type,
         amount,
         message,
         nonce,
@@ -21,7 +21,7 @@ class PrivateWallet:
         new_transaction = Transaction(
             sender_public_key,
             receiver_public_key,
-            type_of_transaction,
+            type,
             amount,
             message,
             nonce,
@@ -54,7 +54,8 @@ class PublicWallet:
         self.node_id = node_id
         self.node_address = node_address
         self.public_key = public_key
-        self.amount = amount
+        self.soft_amount = amount
+        self.hard_amount = amount
         self.stake = stake
 
     def to_dict(self):
@@ -62,7 +63,8 @@ class PublicWallet:
             "node_id": self.node_id,
             "node_address": self.node_address,
             "public_key": self.public_key,
-            "amount": self.amount,
+            "hard_amount": self.hard_amount,
+            "soft_amount": self.soft_amount,
             "stake": self.stake,
         }
 
@@ -72,6 +74,6 @@ class PublicWallet:
             wallet_dict["node_id"],
             wallet_dict["node_address"],
             wallet_dict["public_key"],
-            wallet_dict["amount"],
+            wallet_dict["hard_amount"],
             wallet_dict["stake"],
         )

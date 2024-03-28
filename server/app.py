@@ -7,7 +7,8 @@ from utils.init_utils import init_bootstrap, init_node
 from internal.home import home_bp
 from internal.show_state import state_bp
 from internal.send_transaction import send_transaction_bp
-from internal.stake import stake_bp
+
+# from internal.stake import stake_bp
 from internal.view import view_bp
 from internal.balance import balance_bp
 from internal.conversations import conversations_bp
@@ -16,9 +17,7 @@ from internal.conversations import conversations_bp
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
 from external.receive_init_from_bootstrap import receive_init_from_bootstap_bp
 from external.validate_transaction import validate_transaction_bp
-from external.add_transaction import add_transaction_bp
 from external.validate_block import validate_block_bp
-from external.add_block import add_block_bp
 
 app = Flask(__name__)
 
@@ -38,7 +37,7 @@ app.config["node_count"] = 0
 app.register_blueprint(home_bp)
 app.register_blueprint(state_bp)
 app.register_blueprint(send_transaction_bp)
-app.register_blueprint(stake_bp)
+# app.register_blueprint(stake_bp)
 app.register_blueprint(view_bp)
 app.register_blueprint(balance_bp)
 app.register_blueprint(conversations_bp)
@@ -50,9 +49,7 @@ if app.config["is_bootstrap"] == "1":
 else:
     app.register_blueprint(receive_init_from_bootstap_bp)
 app.register_blueprint(validate_transaction_bp)
-app.register_blueprint(add_transaction_bp)
 app.register_blueprint(validate_block_bp)
-app.register_blueprint(add_block_bp)
 
 if __name__ == "__main__":
 

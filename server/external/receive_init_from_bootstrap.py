@@ -26,8 +26,8 @@ def receive_init_from_bootstap():
         for transaction in transactions:
             transaction = Transaction.from_dict(transaction)
             transaction_key = state.transaction_unique_id(transaction)
-            state.transaction_waiting_room[transaction_key] = transaction
-            state.add_transaction(transaction_key, is_init=True)
+            state.blockchain.transaction_inbox[transaction_key] = transaction
+
 
         current_app.config["my_state"] = state
 

@@ -14,15 +14,17 @@ def send_transaction():
     type = data["type"]
     body = data["body"]
     recipient_id = int(data["recipient_id"])
-    if recipient_id == -1:
-        recipient_public_key = 0
-    else:
-        recipient_public_key = my_state.wallets[recipient_id].public_key
 
     if type == "message":
         amount = 0
         message = body
-    else:
+        recipient_public_key = my_state.wallets[recipient_id].public_key
+    elif type == "coins":
+        amount = int(body)
+        message = ""
+        recipient_public_key = my_state.wallets[recipient_id].public_key
+    elif type == "stake":
+        recipient_public_key = 0
         amount = int(body)
         message = ""
 
@@ -37,10 +39,10 @@ def send_transaction():
     validated = my_state.validate_transaction(new_transaction)
     transaction_key = my_state.transaction_unique_id(new_transaction)
 
-    if type == "message":
-        my_state.conversations[recipient_id].append(
-            ["me_" + str(transaction_key[1]), message]
-        )
+    # if type == "message":
+    #     my_state.conversations[recipient_id].append(
+    #         ["me_" + str(transaction_key[1]), message]
+    #     )
 
     if validated:
         print(f"Broadcasting valid transaction with key {transaction_key}")
@@ -50,19 +52,16 @@ def send_transaction():
             my_state.wallets,
             my_state.my_wallet.node_address,
         )
-        print(f"P1: Transaction with key {transaction_key} validated by all nodes")
-
-        # a transaction is added only if all nodes know that is has been validated from everyone
         if success:
-
-            broadcast(
-                "addTransaction",
-                {"transaction_key": list(transaction_key)},
-                my_state.wallets,
-                my_state.my_wallet.node_address,
-            )
-            my_state.add_transaction(transaction_key)
-            print(f"P2: Transaction with key {transaction_key} added to all nodes")
-            return "Transaction validated from all nodes"
+            print(f"Transaction with key {transaction_key} sent to all nodes")
+        else:
+            print(f"Broadcast of transaction with key {transaction_key} failed")
     else:
-        return "Transaction was not valid and was not broadcasted"
+        print("Transaction was not valid and was not broadcasted")
+
+    response_data = {}
+    response_data = {"status": "success"}
+    status_code = 200
+    response = jsonify(response_data)
+
+    return response, status_code

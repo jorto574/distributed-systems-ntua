@@ -56,7 +56,13 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_stake(self, arg):
         """Stake a certain amount"""
-        stake(address)
+        try:
+            args = arg.split()
+            amount = args[0]
+            stake(address, amount)
+        except:
+            print("Usage:")
+            print("  Stake <amount>       Stake a certain amount")
 
     def do_view(self, arg):
         """View command"""

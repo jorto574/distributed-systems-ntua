@@ -7,13 +7,16 @@ from server.models.transaction import Transaction
 
 load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
-def stake(amount, address, debug:bool = False):
-    if debug:
-        print(f"Staking {amount} coins")
-    response = send_http_request("POST", address, "stake/set", {"stake_value": amount})
+
+def stake(address, amount):
+    print(f"Staking {amount} BCC")
+    payload = {"recipient_id": -1, "type": "stake", "body": amount}
+    send_http_request("POST", address, "send_transaction", payload)
+
+    # response = send_http_request("POST", address, "stake", {"stake_value": amount})
 
 
-def current_stake():
-    address, payload = None, None  # TODO
-    payload = {}
-    send_http_request("POST", address, "stake/view", payload)
+# def current_stake():
+#     address, payload = None, None  # TODO
+#     payload = {}
+#     send_http_request("POST", address, "stake/view", payload)
