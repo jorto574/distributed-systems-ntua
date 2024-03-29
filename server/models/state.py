@@ -61,20 +61,31 @@ class State:
                 transaction.create_transaction_string(),
             )
             if not signature_verified:
+                response = f"Validation of transaction {transaction_key} of type {transaction.type} failed: error verifying the signature"
                 if verbose:
-                    print(
-                        f"Validation of transaction {transaction_key} of type {transaction.type} failed:"
-                        "error verifying the signature"
-                    )
-                return False
-
-        enough_amount = False
+                    print(response)
+                return False, response
 
         total_amount = transaction.total_amount
 
+        valid_amount = True
+
+        if transaction.type == "stake":
+            valid_amount = total_amount >= 0
+        elif transaction.type == "coins":
+            valid_amount = total_amount > 0
+
+        if not valid_amount:
+            response = f"Validation of transaction {transaction_key} of type {transaction.type} failed: Amount not valid"
+            if verbose:
+                print(response)
+            return False, response
+
+        enough_amount = False
+
         if transaction.type == "stake":
             enough_amount = (
-                sender_wallet.soft_amount + sender_wallet.stake
+                sender_wallet.soft_amount + sender_wallet.soft_stake
             ) > total_amount
         else:
             if total_amount > sender_wallet.soft_amount:
@@ -83,12 +94,10 @@ class State:
                 enough_amount = True
 
         if not enough_amount:
+            response = f"Validation of transaction {transaction_key} of type {transaction.type} failed: Not enough BCC to perform transaction"
             if verbose:
-                print(
-                    f"Validation of transaction {transaction_key} of type {transaction.type} failed:"
-                    "Not enough BCC to perform transaction"
-                )
-            return False
+                print(response)
+            return False, response
 
         # Transaction is valid
         self.blockchain.transaction_inbox[transaction_key] = transaction
@@ -97,8 +106,8 @@ class State:
         total_amount = transaction.total_amount
 
         if transaction.type == "stake":
-            sender_wallet.soft_amount += sender_wallet.stake - total_amount
-            sender_wallet.stake = total_amount
+            sender_wallet.soft_amount += sender_wallet.soft_stake - total_amount
+            sender_wallet.soft_stake = total_amount
         else:
             sender_wallet.soft_amount -= total_amount
 
@@ -109,7 +118,10 @@ class State:
 
         threading.Thread(target=self.block_val_process, args=()).start()
 
-        return True
+        return (
+            True,
+            f"Transaction {transaction_key} of type {transaction.type} is valid",
+        )
 
     # def add_transaction(self, transaction_key, is_init=False):
     #     sender_wallet = self.find_wallet_from_public_key(transaction.sender_public_key)
@@ -255,7 +267,8 @@ class State:
                     old_stake = self.stakes[sender_id]
                     sender_wallet.hard_amount += old_stake - total_amount
                     self.stakes[sender_id] = total_amount
-                    sender_wallet.stake = total_amount
+                    sender_wallet.hard_stake = total_amount
+                    sender_wallet.soft_stake = total_amount
                 else:  # for coins and message transactions
                     sender_wallet.hard_amount -= total_amount
                     fees = transaction.fees
@@ -266,12 +279,31 @@ class State:
                     )
                     receiver_wallet.hard_amount += total_amount - fees
 
+                    if transaction.type == "message":
+
+                        if self.my_wallet.node_id == sender_wallet.node_id:
+                            self.conversations[receiver_wallet.node_id].append(
+                                [
+                                    "me"
+                                    # + str(key[1])
+                                    ,
+                                    transaction.message,
+                                ]
+                            )
+                        elif self.my_wallet.node_id == receiver_wallet.node_id:
+                            self.conversations[sender_wallet.node_id].append(
+                                [
+                                    "node" + str(sender_wallet.node_id)
+                                    # + str(key[1])
+                                    ,
+                                    transaction.message,
+                                ]
+                            )
                 if key in self.blockchain.transaction_inbox:
                     del self.blockchain.transaction_inbox[key]
                 else:
                     self.blockchain.blockchain_transactions[key] = transaction
-        print(self.stakes)
-        print(self.blockchain.transaction_inbox)
+
         # update soft amounts to much the updated hard amounts
         for wallet in self.wallets:
             wallet.soft_amount = wallet.hard_amount

@@ -11,8 +11,8 @@ load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 def stake(address, amount):
     print(f"Staking {amount} BCC")
     payload = {"recipient_id": -1, "type": "stake", "body": amount}
-    send_http_request("POST", address, "send_transaction", payload)
-
+    response = send_http_request("POST", address, "send_transaction", payload)
+    print(response["status"])
     # response = send_http_request("POST", address, "stake", {"stake_value": amount})
 
 

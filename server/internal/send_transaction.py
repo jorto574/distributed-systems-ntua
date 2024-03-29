@@ -36,13 +36,8 @@ def send_transaction():
         message,
         my_state.get_my_nonce(),
     )
-    validated = my_state.validate_transaction(new_transaction)
+    validated, response = my_state.validate_transaction(new_transaction)
     transaction_key = my_state.transaction_unique_id(new_transaction)
-
-    # if type == "message":
-    #     my_state.conversations[recipient_id].append(
-    #         ["me_" + str(transaction_key[1]), message]
-    #     )
 
     if validated:
         print(f"Broadcasting valid transaction with key {transaction_key}")
@@ -53,14 +48,17 @@ def send_transaction():
             my_state.my_wallet.node_address,
         )
         if success:
-            print(f"Transaction with key {transaction_key} sent to all nodes")
+            response += "\nSent to all nodes"
+            print(response)
         else:
-            print(f"Broadcast of transaction with key {transaction_key} failed")
+            response += "\nBroadcast of transaction failed"
+            print(response)
     else:
-        print("Transaction was not valid and was not broadcasted")
+        response += "\nTransaction was not broadcasted"
+        print(response)
 
     response_data = {}
-    response_data = {"status": "success"}
+    response_data = {"status": response}
     status_code = 200
     response = jsonify(response_data)
 

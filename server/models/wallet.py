@@ -56,7 +56,8 @@ class PublicWallet:
         self.public_key = public_key
         self.soft_amount = amount
         self.hard_amount = amount
-        self.stake = stake
+        self.soft_stake = stake
+        self.hard_stake = stake
 
     def to_dict(self):
         return {
@@ -65,7 +66,8 @@ class PublicWallet:
             "public_key": self.public_key,
             "hard_amount": self.hard_amount,
             "soft_amount": self.soft_amount,
-            "stake": self.stake,
+            "soft_stake": self.soft_stake,
+            "hard_stake": self.hard_stake,
         }
 
     @classmethod
@@ -75,5 +77,5 @@ class PublicWallet:
             wallet_dict["node_address"],
             wallet_dict["public_key"],
             wallet_dict["hard_amount"],
-            wallet_dict["stake"],
+            wallet_dict["hard_stake"],
         )

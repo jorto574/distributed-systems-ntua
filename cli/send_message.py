@@ -8,4 +8,5 @@ def send_message(address, recipient_id, body):
     print(f"Broadcasting 'message' transaction to {recipient_id}: {body}")
     payload = {"recipient_id": recipient_id, "type": "message", "body": body}
 
-    send_http_request("POST", address, "send_transaction", payload)
+    response = send_http_request("POST", address, "send_transaction", payload)
+    print(response["status"])

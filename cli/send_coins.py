@@ -8,4 +8,5 @@ def send_coins(address, recipient_id, amount):
     print(f"Broadcasting {amount} to {recipient_id}")
     payload = {"recipient_id": recipient_id, "type": "coins", "body": amount}
 
-    send_http_request("POST", address, "send_transaction", payload)
+    response = send_http_request("POST", address, "send_transaction", payload)
+    print(response["status"])

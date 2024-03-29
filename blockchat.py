@@ -71,7 +71,7 @@ class BlockchatCLI(cmd2.Cmd):
     def do_balance(self, args):
         balance(address)
 
-    def do_conversations(self, args):
+    def do_chat(self, args):
         conversations(address)
 
 
