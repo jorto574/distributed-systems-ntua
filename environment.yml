@@ -1,0 +1,4 @@
+name: bc
+channels:
+  - defaults
+prefix: /home/ubuntu/miniconda3/envs/bc
