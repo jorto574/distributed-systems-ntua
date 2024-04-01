@@ -19,7 +19,7 @@ def exp_signal():
             None, # trigerring run_exp to node0 as well
         )
 
-    response_data = {"status": "Test started. Go to server terminal of Node 0 to see results.}
+    response_data = {"status": "Test started. Go to server terminal of Node 0 to see results."}
     response_status = 200
 
     return jsonify(response_data), response_status

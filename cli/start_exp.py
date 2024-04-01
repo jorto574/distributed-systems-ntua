@@ -1,6 +1,6 @@
 from server.utils.send_http_request import send_http_request
 
-def start_exp(address, recipient_id, amount):
+def start_exp(address):
 
     print(f" Starting app test")
 

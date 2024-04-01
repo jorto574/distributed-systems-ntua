@@ -12,7 +12,7 @@ from internal.send_transaction import send_transaction_bp
 from internal.view import view_bp
 from internal.balance import balance_bp
 from internal.conversations import conversations_bp
-from intarnal.exp_signal import exp_signal_bp
+from internal.exp_signal import exp_signal_bp
 
 from external.talk_to_bootstrap import talk_to_bootstrap_bp
 from external.receive_init_from_bootstrap import receive_init_from_bootstap_bp
