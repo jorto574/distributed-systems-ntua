@@ -4,7 +4,7 @@ conversations_bp = Blueprint("conversations", __name__)
 
 
 @conversations_bp.route("/conversations", methods=["GET"])
-def balance():
+def conversations():
     conversations = current_app.config["my_state"].conversations
 
     response_data = {"conversations": conversations}

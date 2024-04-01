@@ -12,6 +12,7 @@ from cli.server_check import server_check
 from cli.view import view
 from cli.balance import balance
 from cli.conversations import conversations
+from cli.start_exp import start_exp
 
 load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
 
@@ -73,6 +74,9 @@ class BlockchatCLI(cmd2.Cmd):
 
     def do_chat(self, args):
         conversations(address)
+
+    def do_start_exp(self,args):
+        start_exp(address)
 
 
 if __name__ == "__main__":
