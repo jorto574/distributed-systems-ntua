@@ -149,9 +149,10 @@ class State:
             print(
                 f"Block with index {new_block_index} has closed. Proof of stake begins"
             )
-            seed = self.blockchain.block_list[-1].current_hash
+            # seed = self.blockchain.block_list[-1].current_hash
 
-            seed = int(("0x" + str(seed)), 16)
+            # seed = int(("0x" + str(seed)), 16)
+            seed = new_block_index
             validator_id = proof_of_stake(self.stakes, seed)
             print(f"Proof of stake ended with validator node_id {validator_id}")
 
