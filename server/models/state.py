@@ -166,9 +166,9 @@ class State:
                 if success:
                     self.add_block(minted_block)
                     self.update_state(minted_block)
-                    print(
-                        f"Block with index {minted_block.index} succesfully broadcasted to all nodes"
-                    )
+                    # print(
+                    #     f"Block with index {minted_block.index} succesfully broadcasted to all nodes"
+                    # )
                 else:
                     print(f"Broadcast of block with index {minted_block.index} failed")
 
@@ -216,9 +216,10 @@ class State:
         incoming_validator_id = self.find_wallet_from_public_key(
             incoming_validator_public_key
         ).node_id
-
-        current_seed = self.blockchain.block_list[-1].current_hash
-        current_seed = int(("0x" + str(current_seed)), 16)
+        
+        # current_seed = self.blockchain.block_list[-1].current_hash
+        # current_seed = int(("0x" + str(current_seed)), 16)
+        current_seed = block.index
         current_validator_id = proof_of_stake(self.stakes, current_seed)
         current_validator_public_key = self.wallets[current_validator_id].public_key
 
