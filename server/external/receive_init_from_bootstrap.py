@@ -19,7 +19,7 @@ def receive_init_from_bootstap():
 
         data = request.json
 
-        blockchain = Blockchain.from_dict(data["blockchain"], capacity=capacity)
+        blockchain = Blockchain.from_dict(data["blockchain"], capacity)
         wallets = State.wallets_deserialization(data["wallets"])
         transactions = data["blockchain"]["transactions"]
         state = State(blockchain, wallets, node_num, my_wallet)

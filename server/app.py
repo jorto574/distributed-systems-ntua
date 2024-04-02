@@ -35,7 +35,7 @@ load_dotenv(f"{previous_directory_full_path}/config{args.id}.env")
 
 URL = os.environ.get("URL")
 PORT = os.environ.get("PORT")
-CAPACITY = os.environ.get("CAPACITY")
+CAPACITY = int(os.environ.get("CAPACITY"))
 app.config["capacity"] = CAPACITY
 app.config["bootstrap_addr"] = os.environ.get("BOOTSTRAP_ADDR")
 app.config["node_num"] = int(os.environ.get("NODE_NUM"))

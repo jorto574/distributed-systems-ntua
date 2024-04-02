@@ -20,7 +20,7 @@ def init_bootstrap(url, port, node_num, capacity):
     )
 
     # Initiate the blockchain
-    my_blockchain = Blockchain([], capacity=capacity)
+    my_blockchain = Blockchain([], capacity)
 
     # Create genesis_block
     index = 0
