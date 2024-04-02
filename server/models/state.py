@@ -30,6 +30,7 @@ class State:
         }
         self.my_nonce = 0
         self.block_waiting_room = {}
+        self.waiting_for_block = None
 
     def get_my_nonce(self):
         nonce = self.my_nonce
@@ -121,7 +122,10 @@ class State:
         # if waiting_for block:
         #   check if block has arrived 
         #else 
-        self.block_val_process()
+        if self.waiting_for_block:
+            pass
+        else:
+            self.block_val_process()
         
         return (
             True,
@@ -130,7 +134,7 @@ class State:
 
     def block_val_process(self):
         # if capacity is full, a new block must be created
-        if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
+        if len(self.blockchain.transaction_inbox) >= self.blockchain.capacity:
             new_block_index = self.blockchain.block_list[-1].index + 1
             print(
                 f"Block with index {new_block_index} has closed. Proof of stake begins"
@@ -157,10 +161,7 @@ class State:
                 else:
                     print(f"Broadcast of block with index {minted_block.index} failed")
             else:
-                
-                global block_validated
-                while not block_validated:
-                    pass  # Waiting until the block is validated
+                self.waiting_for_block = new_block_index
 
                 
 
@@ -197,6 +198,8 @@ class State:
         return wallet
 
     def validate_block(self, block):
+        if block.index == self.waiting_for_block:
+            self.waiting_for_block = None
         incoming_validator_public_key = block.validator
         incoming_validator_id = self.find_wallet_from_public_key(
             incoming_validator_public_key
