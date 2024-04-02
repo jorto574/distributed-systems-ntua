@@ -118,7 +118,6 @@ class State:
 
         # threading.Thread(target=self.block_val_process, args=()).start()
         self.block_val_process()
-        time.sleep(0.1)
         return (
             True,
             f"Transaction {transaction_key} of type {transaction.type} is valid",
