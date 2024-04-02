@@ -1,6 +1,7 @@
 from flask import Blueprint, request, current_app, jsonify
 from utils.broadcast import broadcast
 import time
+import os
 
 end_exp_bp = Blueprint("endExp", __name__)
 
@@ -16,16 +17,33 @@ def end_exp():
     if (node_count) == node_num:
         times = current_app.config["times"]
         start_time = current_app.config["start_time"]
+        blockchain_len = len(current_app.config["my_state"].blockchain.block_list)
         end_time = time.time()
         elapsed_time = end_time - start_time
-        print()
-        print("Elapsed time:", elapsed_time, "seconds")
-        print("Throughput:", (100*node_num)/elapsed_time, "transactions/second")
-        print()
-        for node_id, end_time in times.items():
-            print(f"Node {node_id} elapsed time: {end_time} seconds")
-            print(f"Node {node_id} throughput: {100/end_time} transactions/second")
-            print()
+
+        folder_path = "../runs"
+        test_name = f"NodeNum={node_num}Capacity={current_app.config["capacity"]}Staking=Uni10.txt"
+        output_file_path = os.path.join(folder_path, test_name)
+
+        with open(output_file_path, 'w') as f:
+            f.write(f"Elapsed time: {elapsed_time} seconds\n")
+            f.write(f"Throughput: {(100*node_num)/elapsed_time} transactions/second\n")
+            f.write(f"Block time: {elapsed_time/blockchain_len} seconds/block\n\n")
+            for node_id, end_time in times.items():
+                f.write(f"Node {node_id} elapsed time: {end_time} seconds\n")
+                f.write(f"Node {node_id} throughput: {100/end_time} transactions/second\n\n")
+
+        print("Test results saved to:", output_file_path)
+
+
+        # print()
+        # print("Elapsed time:", elapsed_time, "seconds")
+        # print("Throughput:", (100*node_num)/elapsed_time, "transactions/second")
+        # print()
+        # for node_id, end_time in times.items():
+        #     print(f"Node {node_id} elapsed time: {end_time} seconds")
+        #     print(f"Node {node_id} throughput: {100/end_time} transactions/second")
+        #     print()
 
 
     response_data = {"status": "logged"}
