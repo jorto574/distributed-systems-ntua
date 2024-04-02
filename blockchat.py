@@ -2,6 +2,7 @@ import cmd2
 from dotenv import load_dotenv
 import os
 import sys
+import argparse
 
 from cli.stake import stake
 from cli.utils import show_help, print_logo
@@ -14,7 +15,11 @@ from cli.balance import balance
 from cli.conversations import conversations
 from cli.start_exp import start_exp
 
-load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config.env")
+parser = argparse.ArgumentParser(description='')
+parser.add_argument('id', type=int, help='Node id')
+args = parser.parse_args()
+
+load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config{args.id}.env")
 
 url = os.environ.get("URL")
 port = os.environ.get("PORT")
@@ -80,5 +85,6 @@ class BlockchatCLI(cmd2.Cmd):
 
 
 if __name__ == "__main__":
+
     cli = BlockchatCLI()
     cli.cmdloop()

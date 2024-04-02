@@ -8,7 +8,7 @@ from models.wallet import PublicWallet, PrivateWallet
 from models.state import State
 
 
-def init_bootstrap(url, port, node_num):
+def init_bootstrap(url, port, node_num, capacity):
     # Create a wallet for the bootsrap
     node_id = 0
     node_address = url + ":" + port
@@ -20,7 +20,7 @@ def init_bootstrap(url, port, node_num):
     )
 
     # Initiate the blockchain
-    my_blockchain = Blockchain([], capacity=node_num)
+    my_blockchain = Blockchain([], capacity=capacity)
 
     # Create genesis_block
     index = 0

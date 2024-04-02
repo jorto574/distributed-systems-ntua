@@ -124,25 +124,6 @@ class State:
             f"Transaction {transaction_key} of type {transaction.type} is valid",
         )
 
-    # def add_transaction(self, transaction_key, is_init=False):
-    #     sender_wallet = self.find_wallet_from_public_key(transaction.sender_public_key)
-
-    #     if not is_init:
-
-    #         if receiver_wallet.node_id == self.my_wallet.node_id:
-    #             type = transaction.type
-    #             print(f"You've received a transaction of type {type}")
-    #             if type == "message":
-    #                 self.conversations[transaction_key[0]].append(
-    #                     [
-    #                         "node_"
-    #                         + str(transaction_key[0])
-    #                         + "_"
-    #                         + str(transaction_key[1]),
-    #                         transaction.message,
-    #                     ]
-    #                 )
-
     def block_val_process(self):
         # if capacity is full, a new block must be created
         if len(self.blockchain.transaction_inbox) == self.blockchain.capacity:
@@ -192,13 +173,6 @@ class State:
             self.my_wallet.node_address,
         )
 
-    # def broadcast_add_block(self, index):
-    #     broadcast(
-    #         "/addBlock",
-    #         {"index": index},
-    #         self.wallets,
-    #         self.my_wallet.node_address,
-    #     )
 
     def add_wallet(self, wallet):
         self.wallets.append(wallet)

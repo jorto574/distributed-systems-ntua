@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from dotenv import load_dotenv
+import argparse
 
 from utils.init_utils import init_bootstrap, init_node
 
@@ -23,13 +24,19 @@ from external.end_exp import end_exp_bp
 
 app = Flask(__name__)
 
+parser = argparse.ArgumentParser(description='')
+parser.add_argument('id', type=int, help='Node id')
+args = parser.parse_args()
+
 previous_directory_full_path = os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))
 )
-load_dotenv(f"{previous_directory_full_path}/config.env")
+load_dotenv(f"{previous_directory_full_path}/config{args.id}.env")
 
 URL = os.environ.get("URL")
 PORT = os.environ.get("PORT")
+CAPACITY = os.environ.get("CAPACITY")
+app.config["capacity"] = CAPACITY
 app.config["bootstrap_addr"] = os.environ.get("BOOTSTRAP_ADDR")
 app.config["node_num"] = int(os.environ.get("NODE_NUM"))
 app.config["is_bootstrap"] = os.environ.get("IS_BOOTSTRAP")
@@ -56,12 +63,13 @@ else:
 app.register_blueprint(validate_transaction_bp)
 app.register_blueprint(validate_block_bp)
 app.register_blueprint(run_exp_bp)
+app.register_blueprint(end_exp_bp)
 
 
 if __name__ == "__main__":
 
     if app.config["is_bootstrap"] == "1":
-        my_state = init_bootstrap(URL, PORT, app.config["node_num"])
+        my_state = init_bootstrap(URL, PORT, app.config["node_num"], CAPACITY)
         app.config["my_state"] = my_state
     else:
         app.config["my_state"] = None
