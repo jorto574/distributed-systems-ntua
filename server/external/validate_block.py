@@ -13,22 +13,28 @@ def validate_block():
         my_state = current_app.config["my_state"]
         node_id = my_state.my_wallet.node_id
 
-        block_validated = my_state.validate_block(incoming_block)
+        with my_state.lock:
+            block_validated = my_state.validate_block(incoming_block)
+            blocks = list(my_state.block_waiting_room.values())
+            for block in blocks:
+                my_state.validate_block(block)
+            pass
+        
         response_data = {}
         status_code = 0
 
         if block_validated:
-            my_state.block_waiting_room[incoming_block.index] = incoming_block
-            print(
-                f"Node {node_id} validated the block with index = {incoming_block.index}"
-            )
+            # # my_state.block_waiting_room[incoming_block.index] = incoming_block
+            # print(
+            #     f"Node {node_id} validated the block with index = {incoming_block.index}"
+            # )
             response_data = {"status": "success"}
             status_code = 200
 
         else:
-            print(
-                f"Node {node_id} rejected the block with index = {incoming_block.index}"
-            )
+            # print(
+            #     f"Node {node_id} rejected the block with index = {incoming_block.index}"
+            # )
             response_data = {"status": "failed"}
             status_code = 401
 

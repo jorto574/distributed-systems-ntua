@@ -36,11 +36,13 @@ def send_transaction():
         message,
         my_state.get_my_nonce(),
     )
-    validated, response = my_state.validate_transaction(new_transaction)
+    with my_state.lock:
+        validated, response = my_state.validate_transaction(new_transaction)
+        pass
     transaction_key = my_state.transaction_unique_id(new_transaction)
 
     if validated:
-        print(f"Broadcasting valid transaction with key {transaction_key}")
+        # print(f"Broadcasting valid transaction with key {transaction_key}")
         success = broadcast(
             "validateTransaction",
             {"transaction": new_transaction.to_dict()},
@@ -49,13 +51,13 @@ def send_transaction():
         )
         if success:
             response += "\nSent to all nodes"
-            print(response)
+            # print(response)
         else:
             response += "\nBroadcast of transaction failed"
-            print(response)
+            # print(response)
     else:
         response += "\nTransaction was not broadcasted"
-        print(response)
+        # print(response)
 
     response_data = {}
     response_data = {"status": response}

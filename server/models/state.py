@@ -7,6 +7,9 @@ from utils.crypto import verify_signature
 from utils.send_http_request import send_http_request
 import time
 import threading
+from threading import Lock
+
+
 
 
 class State:
@@ -31,6 +34,7 @@ class State:
         self.my_nonce = 0
         self.block_waiting_room = {}
         self.waiting_for_block = None
+        self.lock = Lock()
 
     def get_my_nonce(self):
         nonce = self.my_nonce
@@ -117,7 +121,7 @@ class State:
             receiver_wallet = self.find_wallet_from_public_key(receiver_public_key)
             receiver_wallet.soft_amount += total_amount - fees
 
-        # threading.Thread(target=self.block_val_process, args=()).start()
+        
         
         # if waiting_for block:
         #   check if block has arrived 
@@ -151,22 +155,30 @@ class State:
                     f"Broadcasting block with index {minted_block.index} to all nodes"
                 )
                 # success is true if the validation of the block from every node is correct
+                self.add_block(minted_block)
+                self.update_state(minted_block)
                 success = self.broadcast_block(minted_block)
-                if success:
-                    self.add_block(minted_block)
-                    self.update_state(minted_block)
-                    # print(
-                    #     f"Block with index {minted_block.index} succesfully broadcasted to all nodes"
-                    # )
-                else:
-                    print(f"Broadcast of block with index {minted_block.index} failed")
+
+                # print(minted_block.to_dict())
+
+                # if success:
+
+                #     # print(
+                #     #     f"Block with index {minted_block.index} succesfully broadcasted to all nodes"
+                #     # )
+                # else:
+                #     print(f"Broadcast of block with index {minted_block.index} failed")
             else:
                 self.waiting_for_block = new_block_index
 
                 
 
     def mint_block(self):
-        transactions_list = list(self.blockchain.transaction_inbox.values())
+        transactions_list = list(self.blockchain.transaction_inbox.values())[:self.blockchain.capacity]
+        keys = list(self.blockchain.transaction_inbox.keys())[:self.blockchain.capacity]
+        for key in keys:
+            del self.blockchain.transaction_inbox[key]
+
         validator_public_key = self.my_wallet.public_key
         new_block = Block(
             self.blockchain.block_list[-1].index + 1,
@@ -198,8 +210,21 @@ class State:
         return wallet
 
     def validate_block(self, block):
-        if block.index == self.waiting_for_block:
+        new_block_index = self.blockchain.block_list[-1].index + 1
+        if new_block_index != block.index:
+            self.block_waiting_room[block.index] = block
+            print(
+                f"Block with index {block.index} from node {incoming_validator_id} is out of line"
+            )
+            return False
+        else:
             self.waiting_for_block = None
+        # else:
+
+        #     print(self.waiting_for_block, block.index)
+        #     threading.Thread(target=send_http_request, args=("POST", self.my_wallet.node_address, "/validateBlock", {"block": block.to_dict()})).start()
+        #     # send_http_request("POST", self.my_wallet.node_address, "/validateBlock", {"block": block.to_dict()})
+        #     return False
         incoming_validator_public_key = block.validator
         incoming_validator_id = self.find_wallet_from_public_key(
             incoming_validator_public_key
@@ -298,7 +323,7 @@ class State:
             wallet.soft_amount = wallet.hard_amount
         # re-validate the remaining transactions
         remaining_transactions = list(self.blockchain.transaction_inbox.values())
-        self.blockchain.transaction_inbox = {}
+        self.blockchain.transaction_inbox.clear()
         for transaction in remaining_transactions:
             if transaction.is_init != 1:
                 self.validate_transaction(transaction, check_signature=False)

@@ -1,5 +1,6 @@
 from models.block import Block
 from models.transaction import Transaction
+from collections import OrderedDict
 
 
 class Blockchain:
@@ -9,7 +10,7 @@ class Blockchain:
         self.transaction_inbox = {}
 
         # transactions that belong to validated blocks
-        self.blockchain_transactions = {}
+        self.blockchain_transactions = OrderedDict()
         self.capacity = capacity
 
     def add_block(self, block):

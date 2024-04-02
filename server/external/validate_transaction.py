@@ -23,11 +23,13 @@ def validate_transaction():
             status_code = 200
             return response, status_code
 
-        _ = my_state.validate_transaction(incoming_transaction)
+        with my_state.lock:
+            _ = my_state.validate_transaction(incoming_transaction)
+            pass
 
-        print(
-                f"Node {node_id} received the transaction with (sender_id,nonce) = {key}"
-        )
+        # print(
+        #         f"Node {node_id} received the transaction with (sender_id,nonce) = {key}"
+        # )
 
         response_data = {}
         response_data = {"status": "success"}
