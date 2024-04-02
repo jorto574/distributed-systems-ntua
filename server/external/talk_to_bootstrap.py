@@ -62,6 +62,7 @@ def talk_to_bootstrap():
                     {
                         "blockchain": my_state.blockchain.to_dict(),
                         "wallets": my_state.wallets_serialization(),
+                        "capacity": current_app.config["capacity"]
                     },
                     wallets,
                     bootstrap_addr,

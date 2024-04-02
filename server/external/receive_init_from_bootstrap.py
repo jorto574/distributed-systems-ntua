@@ -12,13 +12,12 @@ receive_init_from_bootstap_bp = Blueprint("receiveInitFromBootstrap", __name__)
 @receive_init_from_bootstap_bp.route("/receiveInitFromBootstrap", methods=["POST"])
 def receive_init_from_bootstap():
     node_num = current_app.config["node_num"]
-    capacity = current_app.config["capacity"]
     my_wallet = current_app.config["my_wallet"]
 
     try:
 
         data = request.json
-
+        capacity = data["capacity"]
         blockchain = Blockchain.from_dict(data["blockchain"], capacity)
         wallets = State.wallets_deserialization(data["wallets"])
         transactions = data["blockchain"]["transactions"]
