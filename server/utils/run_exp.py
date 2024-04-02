@@ -5,7 +5,7 @@ import time
 def run_exp_backend(node_id, node_address, bootstrap_addr):
     start_time = time.time()
 
-    with open(f"../input_2clients/trans{node_id}.txt", 'r') as file:
+    with open(f"../input_5{node_id}.txt", 'r') as file:
         for line in file:
             match = re.match(r'id(\d+)\s(.+)', line)
             if match:
