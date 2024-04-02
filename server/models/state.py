@@ -116,7 +116,8 @@ class State:
             receiver_wallet = self.find_wallet_from_public_key(receiver_public_key)
             receiver_wallet.soft_amount += total_amount - fees
 
-        threading.Thread(target=self.block_val_process, args=()).start()
+        # threading.Thread(target=self.block_val_process, args=()).start()
+        self.block_val_process()
 
         return (
             True,
@@ -149,10 +150,8 @@ class State:
             print(
                 f"Block with index {new_block_index} has closed. Proof of stake begins"
             )
-            # seed = self.blockchain.block_list[-1].current_hash
-
-            # seed = int(("0x" + str(seed)), 16)
-            seed = new_block_index
+            seed = self.blockchain.block_list[-1].current_hash
+            seed = int(("0x" + str(seed)), 16)
             validator_id = proof_of_stake(self.stakes, seed)
             print(f"Proof of stake ended with validator node_id {validator_id}")
 
@@ -217,10 +216,10 @@ class State:
         incoming_validator_id = self.find_wallet_from_public_key(
             incoming_validator_public_key
         ).node_id
-        
-        # current_seed = self.blockchain.block_list[-1].current_hash
-        # current_seed = int(("0x" + str(current_seed)), 16)
-        current_seed = block.index
+
+        current_seed = self.blockchain.block_list[-1].current_hash
+        current_seed = int(("0x" + str(current_seed)), 16)
+        # current_seed = block.index
         current_validator_id = proof_of_stake(self.stakes, current_seed)
         current_validator_public_key = self.wallets[current_validator_id].public_key
 
