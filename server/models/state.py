@@ -117,7 +117,12 @@ class State:
             receiver_wallet.soft_amount += total_amount - fees
 
         # threading.Thread(target=self.block_val_process, args=()).start()
+        
+        # if waiting_for block:
+        #   check if block has arrived 
+        #else 
         self.block_val_process()
+        
         return (
             True,
             f"Transaction {transaction_key} of type {transaction.type} is valid",
@@ -151,6 +156,13 @@ class State:
                     # )
                 else:
                     print(f"Broadcast of block with index {minted_block.index} failed")
+            else:
+                
+                global block_validated
+                while not block_validated:
+                    pass  # Waiting until the block is validated
+
+                
 
     def mint_block(self):
         transactions_list = list(self.blockchain.transaction_inbox.values())
