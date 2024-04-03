@@ -18,6 +18,7 @@ def end_exp():
         times = current_app.config["times"]
         start_time = current_app.config["start_time"]
         blockchain_len = len(current_app.config["my_state"].blockchain.block_list)
+        val_count = current_app.config["my_state"].validation_count
         end_time = time.time()
         elapsed_time = end_time - start_time
 
@@ -32,6 +33,7 @@ def end_exp():
             for node_id, end_time in times.items():
                 f.write(f"Node {node_id} elapsed time: {end_time} seconds\n")
                 f.write(f"Node {node_id} throughput: {100/end_time} transactions/second\n\n")
+                f.write(f"Node {node_id} validated {val_count[node_id]} blocks")
 
         print("Test results saved to:", output_file_path)
 

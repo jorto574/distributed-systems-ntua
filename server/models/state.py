@@ -32,6 +32,7 @@ class State:
         self.block_waiting_room = {}
         self.waiting_for_block = None
         self.lock = Lock()
+        self.validation_count = [0] * len(wallets)
 
     def get_my_nonce(self):
         nonce = self.my_nonce
@@ -139,6 +140,7 @@ class State:
             seed = int(("0x" + str(seed)), 16)
             validator_id = proof_of_stake(self.stakes, seed)
             print(f"Proof of stake ended with validator node_id {validator_id}")
+            self.validation_count[validator_id] += 1
 
             # if current node is validator, he mints the new block
             if validator_id == self.my_wallet.node_id:
