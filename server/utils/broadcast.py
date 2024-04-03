@@ -19,7 +19,7 @@ def broadcast(
         if not is_receiver_self:
             node_id = wallet.node_id
             retries = 1
-            delay_between_retries = 5
+            delay_between_retries = 0
 
             while retries > 0:
                 try:
