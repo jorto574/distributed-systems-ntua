@@ -9,7 +9,7 @@ def broadcast(
     payload: dict,
     wallets: list[PublicWallet],
     my_address: str,
-    verbose: bool = False,
+    verbose: bool = True,
 ) -> bool:
     success = True
 
@@ -25,7 +25,7 @@ def broadcast(
                 try:
                     success = True
                     response = requests.post(
-                        f"http://{address}/{endpoint}", json=payload
+                        f"http://{address}/{endpoint}", json=payload, timeout=1
                     )
                     if response.status_code == 200:
                         if verbose:

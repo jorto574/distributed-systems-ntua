@@ -21,6 +21,7 @@ def validate_block():
                 blocks = list(my_state.block_waiting_room.values())
                 my_state.block_waiting_room.clear()
                 for block in blocks:
+                    print(block.index)
                     my_state.validate_block(block)
             
         
