@@ -201,8 +201,13 @@ class State:
 
     def validate_block(self, block):
         new_block_index = self.blockchain.block_list[-1].index + 1
+        incoming_validator_public_key = block.validator
+        incoming_validator_id = self.find_wallet_from_public_key(
+            incoming_validator_public_key
+        ).node_id
         if new_block_index != block.index:
             self.block_waiting_room[block.index] = block
+
             print(
                 f"Block with index {block.index} from node {incoming_validator_id} is out of line"
             )
@@ -210,10 +215,7 @@ class State:
         else:
             self.waiting_for_block = None
 
-        incoming_validator_public_key = block.validator
-        incoming_validator_id = self.find_wallet_from_public_key(
-            incoming_validator_public_key
-        ).node_id
+
 
         current_seed = self.blockchain.block_list[-1].current_hash
         current_seed = int(("0x" + str(current_seed)), 16)
