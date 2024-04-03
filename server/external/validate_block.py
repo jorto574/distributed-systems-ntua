@@ -38,7 +38,7 @@ def validate_block():
             #     f"Node {node_id} rejected the block with index = {incoming_block.index}"
             # )
             response_data = {"status": "failed"}
-            status_code = 401
+            status_code = 200
 
         response = jsonify(response_data)
 
