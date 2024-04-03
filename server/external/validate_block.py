@@ -20,7 +20,7 @@ def validate_block():
                 my_state.block_waiting_room.clear()
                 for block in blocks:
                     my_state.validate_block(block)
-                pass
+            pass
         
         response_data = {}
         status_code = 0
