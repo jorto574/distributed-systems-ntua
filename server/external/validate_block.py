@@ -15,13 +15,13 @@ def validate_block():
         node_id = my_state.my_wallet.node_id
 
         with my_state.lock:
-            print(threading.get_native_id())
+            # print(threading.get_native_id())
             block_validated = my_state.validate_block(incoming_block)
             if block_validated:
                 blocks = list(my_state.block_waiting_room.values())
                 my_state.block_waiting_room.clear()
                 for block in blocks:
-                    print(block.index)
+                    # print(block.index)
                     my_state.validate_block(block)
             
         

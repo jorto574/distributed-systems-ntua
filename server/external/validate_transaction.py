@@ -25,7 +25,7 @@ def validate_transaction():
             return response, status_code
 
         with my_state.lock:
-            print(threading.get_native_id(), my_state.lock)
+            # print(threading.get_native_id(), my_state.lock)
             _ = my_state.validate_transaction(incoming_transaction)
             
 
