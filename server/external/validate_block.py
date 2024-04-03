@@ -15,10 +15,12 @@ def validate_block():
 
         with my_state.lock:
             block_validated = my_state.validate_block(incoming_block)
-            blocks = list(my_state.block_waiting_room.values())
-            for block in blocks:
-                my_state.validate_block(block)
-            pass
+            if block_validated:
+                blocks = list(my_state.block_waiting_room.values())
+                my_state.block_waiting_room.clear()
+                for block in blocks:
+                    my_state.validate_block(block)
+                pass
         
         response_data = {}
         status_code = 0
