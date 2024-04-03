@@ -18,7 +18,7 @@ def broadcast(
         is_receiver_self = address == my_address
         if not is_receiver_self:
             node_id = wallet.node_id
-            retries = 3
+            retries = 1
             delay_between_retries = 5
 
             while retries > 0:
