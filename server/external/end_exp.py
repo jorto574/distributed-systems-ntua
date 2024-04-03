@@ -32,8 +32,8 @@ def end_exp():
             f.write(f"Block time: {elapsed_time/blockchain_len} seconds/block\n\n")
             for node_id, end_time in times.items():
                 f.write(f"Node {node_id} elapsed time: {end_time} seconds\n")
-                f.write(f"Node {node_id} throughput: {100/end_time} transactions/second\n\n")
-                f.write(f"Node {node_id} validated {val_count[node_id]} blocks")
+                f.write(f"Node {node_id} throughput: {100/end_time} transactions/second\n")
+                f.write(f"Node {node_id} validated {val_count[node_id]} blocks\n\n")
 
         print("Test results saved to:", output_file_path)
 
