@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from utils.broadcast import broadcast
+import threading 
 
 from models.transaction import Transaction
 
@@ -37,6 +38,7 @@ def send_transaction():
         my_state.get_my_nonce(),
     )
     with my_state.lock:
+        print(threading.get_native_id())
         validated, response = my_state.validate_transaction(new_transaction)
         
     transaction_key = my_state.transaction_unique_id(new_transaction)

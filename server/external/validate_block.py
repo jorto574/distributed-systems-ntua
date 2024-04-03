@@ -1,6 +1,7 @@
 from flask import Blueprint, current_app, request, jsonify
 import traceback
 from models.block import Block
+import threading 
 
 validate_block_bp = Blueprint("validateBlock", __name__)
 
@@ -14,6 +15,7 @@ def validate_block():
         node_id = my_state.my_wallet.node_id
 
         with my_state.lock:
+            print(threading.get_native_id())
             block_validated = my_state.validate_block(incoming_block)
             if block_validated:
                 blocks = list(my_state.block_waiting_room.values())

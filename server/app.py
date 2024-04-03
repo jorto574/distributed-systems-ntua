@@ -76,4 +76,4 @@ if __name__ == "__main__":
         my_wallet = init_node(URL, PORT, app.config["bootstrap_addr"])
         app.config["my_wallet"] = my_wallet
 
-    app.run(debug=False, host=URL, port=PORT)
+    app.run(debug=True, host=URL, port=PORT)

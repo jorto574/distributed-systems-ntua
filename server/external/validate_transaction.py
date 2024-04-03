@@ -1,6 +1,7 @@
 from flask import Blueprint, current_app, request, jsonify
 import traceback
 from models.transaction import Transaction
+import threading
 
 validate_transaction_bp = Blueprint("validateTransaction", __name__)
 
@@ -24,6 +25,7 @@ def validate_transaction():
             return response, status_code
 
         with my_state.lock:
+            print(threading.get_native_id())
             _ = my_state.validate_transaction(incoming_transaction)
             
 

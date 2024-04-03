@@ -1,44 +1,44 @@
-Elapsed time: 23.29083514213562 seconds
-Throughput: 42.935343189600474 transactions/second
-Block time: 0.22834152100132962 seconds/block
+Elapsed time: 23.672280073165894 seconds
+Throughput: 42.243501551570716 transactions/second
+Block time: 0.24658625076214472 seconds/block
 
-Node 9 elapsed time: 21.132837057113647 seconds
-Node 9 throughput: 4.731972320126247 transactions/second
-Node 9 validated 9 blocks
+Node 0 elapsed time: 16.792763233184814 seconds
+Node 0 throughput: 5.954946104544976 transactions/second
+Node 0 validated 4 blocks
 
-Node 7 elapsed time: 21.83799457550049 seconds
-Node 7 throughput: 4.579175054479936 transactions/second
+Node 4 elapsed time: 22.199862241744995 seconds
+Node 4 throughput: 4.504532456600488 transactions/second
+Node 4 validated 13 blocks
+
+Node 1 elapsed time: 22.92081880569458 seconds
+Node 1 throughput: 4.362845884683466 transactions/second
+Node 1 validated 5 blocks
+
+Node 5 elapsed time: 22.929449558258057 seconds
+Node 5 throughput: 4.361203688990647 transactions/second
+Node 5 validated 9 blocks
+
+Node 9 elapsed time: 22.940112113952637 seconds
+Node 9 throughput: 4.359176603115989 transactions/second
+Node 9 validated 12 blocks
+
+Node 6 elapsed time: 22.97405433654785 seconds
+Node 6 throughput: 4.352736288297049 transactions/second
+Node 6 validated 8 blocks
+
+Node 8 elapsed time: 23.023123502731323 seconds
+Node 8 throughput: 4.343459304648069 transactions/second
+Node 8 validated 13 blocks
+
+Node 7 elapsed time: 23.1681010723114 seconds
+Node 7 throughput: 4.316279512415963 transactions/second
 Node 7 validated 10 blocks
 
-Node 8 elapsed time: 22.278608322143555 seconds
-Node 8 throughput: 4.488610713650646 transactions/second
-Node 8 validated 7 blocks
+Node 2 elapsed time: 23.295345783233643 seconds
+Node 2 throughput: 4.292702968675099 transactions/second
+Node 2 validated 10 blocks
 
-Node 5 elapsed time: 22.525195360183716 seconds
-Node 5 throughput: 4.439473149998216 transactions/second
-Node 5 validated 16 blocks
-
-Node 6 elapsed time: 22.519293069839478 seconds
-Node 6 throughput: 4.4406367326837595 transactions/second
-Node 6 validated 12 blocks
-
-Node 2 elapsed time: 22.54495859146118 seconds
-Node 2 throughput: 4.435581444708203 transactions/second
-Node 2 validated 11 blocks
-
-Node 0 elapsed time: 22.830190181732178 seconds
-Node 0 throughput: 4.380165000991366 transactions/second
-Node 0 validated 7 blocks
-
-Node 4 elapsed time: 22.957582235336304 seconds
-Node 4 throughput: 4.355859383401447 transactions/second
-Node 4 validated 12 blocks
-
-Node 1 elapsed time: 23.009519815444946 seconds
-Node 1 throughput: 4.346027244465825 transactions/second
-Node 1 validated 9 blocks
-
-Node 3 elapsed time: 23.231271266937256 seconds
-Node 3 throughput: 4.30454273685487 transactions/second
-Node 3 validated 8 blocks
+Node 3 elapsed time: 23.61349320411682 seconds
+Node 3 throughput: 4.234866867667246 transactions/second
+Node 3 validated 10 blocks
 
