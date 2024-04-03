@@ -32,7 +32,7 @@ class State:
         self.block_waiting_room = {}
         self.waiting_for_block = None
         self.lock = Lock()
-        self.validation_count = [0] * len(wallets)
+        self.validation_count = [0] * node_num
 
     def get_my_nonce(self):
         nonce = self.my_nonce
