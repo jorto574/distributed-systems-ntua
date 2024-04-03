@@ -7,10 +7,10 @@ class Blockchain:
     def __init__(self, block_list: list[Block], capacity):
         self.block_list = block_list
         # transactions that have not yet "become" a block
-        self.transaction_inbox = {}
+        self.transaction_inbox = OrderedDict()
 
         # transactions that belong to validated blocks
-        self.blockchain_transactions = OrderedDict()
+        self.blockchain_transactions = {}
         self.capacity = capacity
 
     def add_block(self, block):

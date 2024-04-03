@@ -9,9 +9,6 @@ import time
 import threading
 from threading import Lock
 
-
-
-
 class State:
     def __init__(
         self,
@@ -121,11 +118,6 @@ class State:
             receiver_wallet = self.find_wallet_from_public_key(receiver_public_key)
             receiver_wallet.soft_amount += total_amount - fees
 
-        
-        
-        # if waiting_for block:
-        #   check if block has arrived 
-        #else 
         if self.waiting_for_block:
             pass
         else:
@@ -158,8 +150,6 @@ class State:
                 self.add_block(minted_block)
                 self.update_state(minted_block)
                 success = self.broadcast_block(minted_block)
-
-                # print(minted_block.to_dict())
 
                 # if success:
 
@@ -219,12 +209,7 @@ class State:
             return False
         else:
             self.waiting_for_block = None
-        # else:
 
-        #     print(self.waiting_for_block, block.index)
-        #     threading.Thread(target=send_http_request, args=("POST", self.my_wallet.node_address, "/validateBlock", {"block": block.to_dict()})).start()
-        #     # send_http_request("POST", self.my_wallet.node_address, "/validateBlock", {"block": block.to_dict()})
-        #     return False
         incoming_validator_public_key = block.validator
         incoming_validator_id = self.find_wallet_from_public_key(
             incoming_validator_public_key
@@ -328,9 +313,3 @@ class State:
             if transaction.is_init != 1:
                 self.validate_transaction(transaction, check_signature=False)
 
-    # def set_stake(self, stake_amount):
-    #     # NOTE: the recipient id of the transaction that is created by set_stake() will be -1 due to the fact that
-    #     #       the node ids start from 0.
-    #     payload = {"recipient_id": -1, "type": "stake", "body": stake_amount}
-
-    #     send_http_request("POST", self.my_wallet.address, "send_transaction", payload)
