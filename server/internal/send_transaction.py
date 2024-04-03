@@ -38,7 +38,7 @@ def send_transaction():
     )
     with my_state.lock:
         validated, response = my_state.validate_transaction(new_transaction)
-        pass
+        
     transaction_key = my_state.transaction_unique_id(new_transaction)
 
     if validated:

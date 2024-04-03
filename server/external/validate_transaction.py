@@ -25,7 +25,7 @@ def validate_transaction():
 
         with my_state.lock:
             _ = my_state.validate_transaction(incoming_transaction)
-            pass
+            
 
         # print(
         #         f"Node {node_id} received the transaction with (sender_id,nonce) = {key}"

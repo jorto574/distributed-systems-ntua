@@ -7,7 +7,7 @@ from utils.crypto import verify_signature
 from utils.send_http_request import send_http_request
 import time
 import threading
-from threading import Lock
+from threading import RLock
 
 class State:
     def __init__(
@@ -31,7 +31,7 @@ class State:
         self.my_nonce = 0
         self.block_waiting_room = {}
         self.waiting_for_block = None
-        self.lock = Lock()
+        self.lock = RLock()
         self.validation_count = [0] * node_num
 
     def get_my_nonce(self):
