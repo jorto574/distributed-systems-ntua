@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument('id', type=int, help='Node id')
 args = parser.parse_args()
 
-load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config{args.id}.env")
+load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config/config{args.id}.env")
 
 url = os.environ.get("URL")
 port = os.environ.get("PORT")

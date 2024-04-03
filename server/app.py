@@ -31,7 +31,7 @@ args = parser.parse_args()
 previous_directory_full_path = os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))
 )
-load_dotenv(f"{previous_directory_full_path}/config{args.id}.env")
+load_dotenv(f"{previous_directory_full_path}/config/config{args.id}.env")
 
 URL = os.environ.get("URL")
 PORT = os.environ.get("PORT")
