@@ -23,7 +23,7 @@ def end_exp():
         elapsed_time = end_time - start_time
 
         folder_path = "../runs"
-        test_name = f"NodeNum={node_num}Capacity={current_app.config["capacity"]}Staking=Uni10.txt"
+        test_name = f"NodeNum={node_num}Capacity={current_app.config["capacity"]}Staking=one100.txt"
         output_file_path = os.path.join(folder_path, test_name)
 
         with open(output_file_path, 'w') as f:
