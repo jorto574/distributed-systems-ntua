@@ -25,7 +25,7 @@ def broadcast(
                 try:
                     success = True
                     response = requests.post(
-                        f"http://{address}/{endpoint}", json=payload, timeout=0.1
+                        f"http://{address}/{endpoint}", json=payload, timeout=0.05
                     )
                     if response.status_code == 200:
                         if verbose:

@@ -28,23 +28,23 @@ def talk_to_bootstrap():
         node_public_key = request_data.get("public_key")
         node_address = request_data.get("address")
 
-        # new_transaction = my_wallet.create_transaction(
-        #     my_wallet.public_key,
-        #     node_public_key,
-        #     "coins",
-        #     1000,
-        #     f"Welcome to Blockchat node {node_id}",
-        #     my_state.get_my_nonce(),
-        # )
-        # new_transaction.is_init = 1
+        new_transaction = my_wallet.create_transaction(
+            my_wallet.public_key,
+            node_public_key,
+            "coins",
+            1000,
+            f"Welcome to Blockchat node {node_id}",
+            my_state.get_my_nonce(),
+        )
+        new_transaction.is_init = 1
 
         my_state.wallets[0].hard_amount -= 1000
         my_state.wallets[0].soft_amount -= 1000
         node_wallet = PublicWallet(node_id, node_address, node_public_key, 1000)
         my_state.add_wallet(node_wallet)
 
-        # transaction_key = my_state.transaction_unique_id(new_transaction)
-        # my_state.blockchain.transaction_inbox[transaction_key] = new_transaction
+        transaction_key = my_state.transaction_unique_id(new_transaction)
+        my_state.blockchain.transaction_inbox[transaction_key] = new_transaction
 
         response_data = {"status": "success", "id": node_id}
 
