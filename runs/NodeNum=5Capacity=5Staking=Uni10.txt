@@ -1,0 +1,24 @@
+Elapsed time: 13.107490062713623 seconds
+Throughput: 38.14612848132771 transactions/second
+Block time: 0.1260335582953233 seconds/block
+
+Node 4 elapsed time: 12.124390840530396 seconds
+Node 4 throughput: 8.247837051385039 transactions/second
+Node 4 validated 18 blocks
+
+Node 3 elapsed time: 12.507329225540161 seconds
+Node 3 throughput: 7.995312044381021 transactions/second
+Node 3 validated 19 blocks
+
+Node 2 elapsed time: 12.916082382202148 seconds
+Node 2 throughput: 7.74228570559414 transactions/second
+Node 2 validated 16 blocks
+
+Node 0 elapsed time: 13.0286386013031 seconds
+Node 0 throughput: 7.675399023655332 transactions/second
+Node 0 validated 19 blocks
+
+Node 1 elapsed time: 13.061547756195068 seconds
+Node 1 throughput: 7.656060511861635 transactions/second
+Node 1 validated 28 blocks
+
