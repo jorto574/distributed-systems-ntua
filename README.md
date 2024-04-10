@@ -8,7 +8,7 @@ BlockChat is a simple Blockchain platform in which users can send coins and mess
 
 - Create a conda environment using the ```environment.yml```
 - Add the ```URL``` and ```PORT``` to the config file of your node
-- start server: ````python start_server.py <Node_id>```
+- start server: ```python start_server.py <Node_id>```
 - Wait until bootstrap node initializes the blockchain
 - Start Cli: ```python blockchat.py <Node_id>```
 
