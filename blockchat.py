@@ -15,22 +15,26 @@ from cli.balance import balance
 from cli.conversations import conversations
 from cli.start_exp import start_exp
 
-parser = argparse.ArgumentParser(description='')
-parser.add_argument('id', type=int, help='Node id')
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description='')
+# parser.add_argument('id', type=int, help='Node id')
+# args = parser.parse_args()
 
-load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config/config{args.id}.env")
+# load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config/config{args.id}.env")
 
-url = os.environ.get("URL")
-port = os.environ.get("PORT")
-address = url + ":" + port
+# url = os.environ.get("URL")
+# port = os.environ.get("PORT")
+# address = url + ":" + port
 
 
 class BlockchatCLI(cmd2.Cmd):
-    def __init__(self):
+    def __init__(self, node_id):
+        load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/config/config{node_id}.env")
+        url = os.environ.get("URL")
+        port = os.environ.get("PORT")
+        self.address = url + ":" + port
         super().__init__()
         print_logo()
-        if not server_check(address):
+        if not server_check(self.address):
             sys.exit()
         show_help()
 
@@ -44,7 +48,7 @@ class BlockchatCLI(cmd2.Cmd):
             args = arg.split()
             recipient_id = args[0]
             amount = " ".join(args[1:])
-            send_coins(address, recipient_id, amount)
+            send_coins(self.address, recipient_id, amount)
         except:
             print("Usage:")
             print("  t <recipient_id> <amount>       Send coins")
@@ -55,7 +59,7 @@ class BlockchatCLI(cmd2.Cmd):
             args = arg.split()
             recipient_id = args[0]
             message = " ".join(args[1:])
-            send_message(address, recipient_id, message)
+            send_message(self.address, recipient_id, message)
         except:
             print("Usage:")
             print("  m <recipient_id> <message>       Send a message")
@@ -65,26 +69,26 @@ class BlockchatCLI(cmd2.Cmd):
         try:
             args = arg.split()
             amount = args[0]
-            stake(address, amount)
+            stake(self.address, amount)
         except:
             print("Usage:")
             print("  Stake <amount>       Stake a certain amount")
 
     def do_view(self, arg):
         """View command"""
-        view(address)
+        view(self.address)
 
     def do_balance(self, args):
-        balance(address)
+        balance(self.address)
 
     def do_chat(self, args):
-        conversations(address)
+        conversations(self.address)
 
     def do_start_exp(self,args):
-        start_exp(address)
-
+        start_exp(self.address)
+    
 
 if __name__ == "__main__":
-
-    cli = BlockchatCLI()
+    node_id = sys.argv[1]
+    cli = BlockchatCLI(node_id)
     cli.cmdloop()

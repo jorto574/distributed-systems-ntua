@@ -6,10 +6,7 @@ import argparse
 from utils.init_utils import init_bootstrap, init_node
 
 from internal.home import home_bp
-from internal.show_state import state_bp
 from internal.send_transaction import send_transaction_bp
-
-# from internal.stake import stake_bp
 from internal.view import view_bp
 from internal.balance import balance_bp
 from internal.conversations import conversations_bp
@@ -46,7 +43,6 @@ app.config["times"] = {}
 
 # Internal Blueprints
 app.register_blueprint(home_bp)
-app.register_blueprint(state_bp)
 app.register_blueprint(send_transaction_bp)
 app.register_blueprint(exp_signal_bp)
 
